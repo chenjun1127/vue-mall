@@ -13,7 +13,10 @@ var products = require('./routes/products');
 var app = express();
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/shop-mall');
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
+var dbUrl = 'mongodb://localhost/shop-mall';
+mongoose.connect(dbUrl);
 mongoose.connection.on('connected',()=>{
     console.log("MongoDB connected success.");
 });
@@ -23,9 +26,21 @@ mongoose.connection.on('error',()=>{
 mongoose.connection.on('disconnected',()=>{
     console.log("MongoDB connected disconnected.");
 });
-// views engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('views engine', 'jade');
+
+app.use(session({
+    secret: 'mall',
+    name: 'login-user', //这里的name值得是cookie的name，默认cookie的name是：connect.sid
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24 * 5
+    }, //设置maxAge是80000ms，即80s后session和相应的cookie失效过期
+    store: new MongoStore({
+        url: dbUrl,
+        collection: 'sessions'
+    }),
+    resave: false,
+    saveUninitialized: true
+}))
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 

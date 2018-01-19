@@ -1,17 +1,17 @@
 <template>
     <div class="container pt">
-        <img :src="success" class="status_ok">
+        <img :src="fail" class="status_ok">
         <div class="msg"> {{msg}}，{{number}}秒后返回</div>
     </div>
 </template>
 
 <script>
     export default {
-        name: 'Success',
+        name: 'fail',
         data() {
             return {
-                msg: '操作成功',
-                success: require('../../static/svg/success.svg'),
+                msg: '',
+                fail: require('../../static/svg/fail.svg'),
                 number: 3,
             }
         },
@@ -21,6 +21,7 @@
                 this.number--;
                 if (this.number === 0) {
                     clearInterval(timer);
+                    // this.$router.push(this.$route.params.url);
                     this.$route.params.url ? this.$router.push(this.$route.params.url) : this.$router.go(-1);
                 }
             }, 1000);

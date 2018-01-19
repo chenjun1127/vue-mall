@@ -3,9 +3,8 @@
         .v-modal-dialog(:style="`width:${modal.style.width}`")
             .v-modal-content
                 .v-modal-header
-                    h5.v-modal-title
-                        <slot name='title'></slot>
-                    span.close-btn(@click="close") &times;
+                    h5.v-modal-title {{modal.title}}
+                    span.close-btn(@click="handleClose") &times;
                 .v-modal-body
                     .v-modal-inner
                         <slot name='content'></slot>
@@ -17,11 +16,11 @@
     export default {
         name: 'modal',
         methods: {
-            close() {
+            handleClose() {
                 this.modal.show = false;
             }
         },
-        props: ['modal']
+        props: ['modal'],
     }
 </script>
 
@@ -62,7 +61,9 @@
         padding: 15px;
         border-bottom: 1px solid #eceeef;
         font-size: 16px;
-        /*height: 40px;*/
+        margin: 0;
+        height: 44px;
+
     }
 
     .close-btn {
@@ -72,7 +73,7 @@
         font-weight: 400;
         cursor: pointer;
         color: #888;
-        top: 12px;
+        top: 3px;
     }
 
     .v-modal-body {

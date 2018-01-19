@@ -1,26 +1,26 @@
 <template>
-    <div class="container">
+    <div class="container-fluid">
         <Header></Header>
-        <div class="row">
-            <div class="col-md-12">
-                <form class="form-horizontal">
-                    <div class="form-group">
-                        <label for="productCategory" class="col-md-2 control-label">商品类别</label>
-                        <div class="col-md-10">
-                            <input type="text" class="form-control" id="productCategory" @blur="validate($event)" v-model="name"
-                                   placeholder="商品类别">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="productCategory" class="col-md-2 control-label">商品类别</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" id="productCategory" @blur="validate($event)" v-model="name" placeholder="商品类别">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <button type="button" @click="addCategory" class="btn btn-primary" :disabled="disabled">提交</button>
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <button type="button" @click="addCategory" class="btn btn-primary" :disabled="disabled">提交</button>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-
 </template>
 
 <script>

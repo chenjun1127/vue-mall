@@ -1,7 +1,7 @@
-var express = require('express');
-var router = express.Router();
-var Categories = require('../models/category');
-/* GET home page. */
+const express = require('express');
+const router = express.Router();
+const Categories = require('../models/category');
+// 查询分类接口
 router.get('/', function (req, res, next) {
     Categories.fetch((err, categories) => {
         if (err) {
@@ -11,6 +11,7 @@ router.get('/', function (req, res, next) {
         }
     })
 });
+// 增加分类接口
 router.post('/add', function (req, res, next) {
     let _categories = new Categories(req.body);
     _categories.save((err) => {

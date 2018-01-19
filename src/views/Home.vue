@@ -1,20 +1,22 @@
 <template>
-    <div class="container">
+    <div class="container-fluid">
         <Header></Header>
-        <div class="row">
-            <div class="col-md-3 card" v-for="item in productList">
-                <div class="card-content">
-                    <router-link :to="{path:'/product/detail',query: {id: item._id}}">
-                        <div class="card-img"><img class="card-img-top" v-lazy="`/static/images/${item.image}`" alt=""></div>
-                        <h4 class="card-title">{{item.name}}</h4>
-                    </router-link>
-                    <p class="card-text">价格：<em>￥</em><span>{{formatPrice(item.price)}}</span></p>
-                    <p class="card-text">库存：{{item.amount}}</p>
-                    <router-link class="btn btn-primary pay-btn" :to="{path:'/product/detail',query: {id: item._id}}">立即购买</router-link>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 card" v-for="item in productList">
+                    <div class="card-content">
+                        <router-link :to="{path:'/product/detail',query: {id: item._id}}">
+                            <div class="card-img"><img class="card-img-top" v-lazy="`/static/images/${item.image}`" alt=""></div>
+                            <h4 class="card-title">{{item.name}}</h4>
+                        </router-link>
+                        <p class="card-text">价格：<em>￥</em><span>{{formatPrice(item.price)}}</span></p>
+                        <p class="card-text">库存：{{item.amount}}</p>
+                        <router-link class="btn btn-danger pay-btn" :to="{path:'/product/detail',query: {id: item._id}}">立即购买</router-link>
+                    </div>
                 </div>
             </div>
+            <div class="product-tips" v-show="ok">暂无商品</div>
         </div>
-        <div class="product-tips" v-show="ok">暂无商品</div>
     </div>
 </template>
 
@@ -36,7 +38,7 @@
         },
         methods: {
             getData() {
-                axios.get('/api/products').then(res => {
+                axios.get('/api/products?t=' + Date.now()).then(res => {
                     if (res.data.list.length > 0) {
                         this.productList = res.data.list;
                     } else {
@@ -84,6 +86,7 @@
 
     .pay-btn {
         margin: 10px auto 15px;
+        /*background: #e4393c;*/
     }
 
     .card-text span {

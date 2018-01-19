@@ -1,75 +1,77 @@
 <template>
-    <div class="container">
+    <div class="container-fluid">
         <Header></Header>
-        <div class="alert alert-danger" v-show="isAlert">{{validateMsg}}</div>
-        <form class="form-horizontal">
-            <div class="form-group">
-                <label for="productName" class="col-md-2 control-label">商品名称</label>
-                <div class="col-md-10">
-                    <input type="text" class="form-control" id="productName" @blur="validate($event)" v-model="productInfo.name"
-                           placeholder="商品名称">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="productPrice" class="col-md-2 control-label">商品价格</label>
-                <div class="col-md-10">
-                    <input type="text" class="form-control" id="productPrice" @blur="validate($event)" v-model="productInfo.price" placeholder="商品价格">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="productImage" class="col-md-2 control-label">商品图片</label>
-                <div class="col-md-10">
-                    <input type="text" class="form-control" id="productImage" @blur="validate($event)" v-model="productInfo.image" placeholder="商品图片">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="productAmount" class="col-md-2 control-label">库存数量</label>
-                <div class="col-md-10">
-                    <input type="text" class="form-control" id="productAmount" @blur="validate($event)" v-model="productInfo.amount" placeholder="库存数量">
-                </div>
-            </div>
-            <div v-if="isCategory">
+        <div class="container">
+            <div class="alert alert-danger" v-show="isAlert">{{validateMsg}}</div>
+            <form class="form-horizontal">
                 <div class="form-group">
-                    <label for="productAmount" class="col-md-2 control-label">商品类别</label>
+                    <label for="productName" class="col-md-2 control-label">商品名称</label>
                     <div class="col-md-10">
-                        <select v-model="selected" class="form-control" @blur="validate($event)">
-                            <option v-for="option in categories" v-bind:value="option.id">
-                                {{ option.name }}
-                            </option>
-                        </select>
+                        <input type="text" class="form-control" id="productName" @blur="validate($event)" v-model="productInfo.name"
+                               placeholder="商品名称">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-2 control-label"></label>
+                    <label for="productPrice" class="col-md-2 control-label">商品价格</label>
                     <div class="col-md-10">
-                        <p class="form-control-static">没找到合适的分类？去
-                            <router-link :to="{path:'/category/add'}">添加分类</router-link>
-                            吧！
-                        </p>
+                        <input type="text" class="form-control" id="productPrice" @blur="validate($event)" v-model="productInfo.price" placeholder="商品价格">
                     </div>
                 </div>
-            </div>
+                <div class="form-group">
+                    <label for="productImage" class="col-md-2 control-label">商品图片</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" id="productImage" @blur="validate($event)" v-model="productInfo.image" placeholder="商品图片">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="productAmount" class="col-md-2 control-label">库存数量</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" id="productAmount" @blur="validate($event)" v-model="productInfo.amount" placeholder="库存数量">
+                    </div>
+                </div>
+                <div v-if="isCategory">
+                    <div class="form-group">
+                        <label for="productAmount" class="col-md-2 control-label">商品类别</label>
+                        <div class="col-md-10">
+                            <select v-model="selected" class="form-control" @blur="validate($event)">
+                                <option v-for="option in categories" v-bind:value="option.id">
+                                    {{ option.name }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"></label>
+                        <div class="col-md-10">
+                            <p class="form-control-static">没找到合适的分类？去
+                                <router-link :to="{path:'/category/add'}">添加分类</router-link>
+                                吧！
+                            </p>
+                        </div>
+                    </div>
+                </div>
 
-            <div v-else class="form-group">
-                <label class="col-md-2 control-label">商品类别</label>
-                <div class="col-md-10">
-                    <p class="form-control-static">当前暂无分类，请先 <a href="javascript:void(0)" @click="addCategory">添加分类</a></p>
+                <div v-else class="form-group">
+                    <label class="col-md-2 control-label">商品类别</label>
+                    <div class="col-md-10">
+                        <p class="form-control-static">当前暂无分类，请先 <a href="javascript:void(0)" @click="addCategory">添加分类</a></p>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
-                    <button type="button" @click="getData" class="btn btn-primary" :disabled="disabled">提交</button>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" @click="getData" class="btn btn-danger" :disabled="disabled">提交</button>
+                    </div>
                 </div>
-            </div>
-        </form>
-        <Modal :modal="modal">
-            <p slot="title">添加分类</p>
-            <input slot="content" type="text" class="form-control" v-model="selected">
-            <div slot="footer">
-                <button class="btn btn-primary" @click="cancel">取消</button>
-                <button class="btn btn-danger" @click="enter">确定</button>
-            </div>
-        </Modal>
+            </form>
+            <Modal :modal="modal">
+                <p slot="title">添加分类</p>
+                <input slot="content" type="text" class="form-control" v-model="selected">
+                <div slot="footer">
+                    <button class="btn btn-default" @click="cancel">取消</button>
+                    <button class="btn btn-danger" @click="enter">确定</button>
+                </div>
+            </Modal>
+        </div>
     </div>
 </template>
 
@@ -191,12 +193,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-    .focus {
-        border-color: #d01a39;
-        outline: 0;
-        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(208, 26, 57, .6);
-        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(208, 26, 57, .6);
-    }
+
 
     .form-control-static a {
         color: #286090;

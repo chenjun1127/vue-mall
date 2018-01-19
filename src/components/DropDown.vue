@@ -1,12 +1,9 @@
 <template>
-    <div style="padding: 100px;">
+    <div>
         <div class="drop-wrap" v-click-outside="handleClose">
-            <a href="#" class="drop-btn" @click="show = !show">下拉 <span class="caret"></span></a>
-            <ul class="drop-menu" v-show='show'>
-                <li><a href="javascript:;">item1</a></li>
-                <li><a href="javascript:;">item2</a></li>
-                <li><a href="javascript:;">item3</a></li>
-                <li><a href="javascript:;">item4item4item4</a></li>
+            <a href="#" ref="dropBtn" class="drop-btn" @click="show = !show">{{dropDown.title}} <span class="caret"></span></a>
+            <ul class="drop-menu" v-show='show' :style="dropStyle">
+                <slot name="dropLi"></slot>
             </ul>
         </div>
     </div>
@@ -14,13 +11,28 @@
 
 <script>
     export default {
-        name: 'DropDown',
+        name: 'dropDown',
         data() {
             return {
-                show: false
+                show: false,
+                dropRightPosition: ''
             }
         },
-
+        computed: {
+            dropStyle() {
+                let position = this.dropDown.position;
+                if (position === 'right') {
+                    return {right: this.dropRightPosition + 'px', left: 'inherit'};
+                } else if (position === 'left') {
+                    return {left: 0};
+                } else {
+                    return {left: position};
+                }
+            }
+        },
+        mounted() {
+            this.dropRightPosition = this.$refs.dropBtn.parentNode.offsetWidth - this.$refs.dropBtn.offsetWidth;
+        },
         methods: {
             handleClose() {
                 this.show = false;
@@ -46,18 +58,20 @@
                     delete el.__vueClickOutside__;
                 }
             }
-        }
+        },
+        props: ['dropDown']
     }
 </script>
 
 <style scoped>
+
     .drop-wrap {
         position: relative;
     }
 
     .drop-btn {
         border: 1px solid #adadad;
-        padding: 8px 10px;
+        padding: 6px 10px;
         border-radius: 4px;
         text-decoration: none;
         display: inline-block;
@@ -65,6 +79,7 @@
 
     .drop-btn:hover {
         background: #eee;
+        color: #333;
     }
 
     .caret {
@@ -93,6 +108,7 @@
         border-radius: 4px;
         -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
         box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+        min-width: 150px;
     }
 
     .drop-menu li a {
