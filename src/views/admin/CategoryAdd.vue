@@ -1,6 +1,6 @@
 <template>
-    <div class="container-fluid">
-        <Header></Header>
+    <div>
+        <Header :navBread="navBread"></Header>
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
@@ -13,7 +13,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-md-offset-2 col-md-10">
-                                <button type="button" @click="addCategory" class="btn btn-primary" :disabled="disabled">提交</button>
+                                <button type="button" @click="addCategory" class="btn btn-danger" :disabled="disabled">提交</button>
                             </div>
                         </div>
                     </form>
@@ -32,7 +32,19 @@
         data() {
             return {
                 name: '',
-                disabled: true
+                disabled: true,
+                navBread:[
+                    {
+                        path: '/',
+                        name: '首页'
+                    }, {
+                        path: '/product/list',
+                        name: '商品列表 '
+                    }, {
+                        path: '/',
+                        name: '添加分类'
+                    }
+                ]
             }
         },
         methods: {

@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Products = require('../models/product');
+const {requiredLogin, requiredAdmin} = require('../middleware/auth');
 // 查询接口
-router.get('/', function (req, res, next) {
+router.get('/', (req, res, next) => {
     Products.find({}).populate('category').exec((err, products) => {
         if (err) {
             res.json({code: 403, desc: err.message});
@@ -12,7 +13,7 @@ router.get('/', function (req, res, next) {
     })
 });
 // 添加更新商品接口
-router.post('/save', function (req, res, next) {
+router.post('/save', (req, res, next) => {
     if (req.body._id) {
         let productObj = req.body;
         Products.findById(req.body._id, (err, product) => {

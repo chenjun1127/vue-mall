@@ -9,7 +9,7 @@ var debug = require('debug')('server:server');
 var http = require('http');
 
 /**
- * Get port from environment and store in Express.
+ * Get port from environment and vuex in Express.
  */
 
 var port = normalizePort(process.env.PORT || '5000');

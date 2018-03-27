@@ -1,5 +1,5 @@
 <template>
-    <div class="row">
+    <div>
         <div class="container">
             <div class="row">
                 <div class="col-md-4">
@@ -8,7 +8,7 @@
                         <p>XX商城网</p>
                     </div>
                 </div>
-                <div class="col-md-4" style="padding-top: 48px;">
+                <div class="col-md-4" style="padding-top: 4%">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Search for...">
                         <span class="input-group-btn">
@@ -17,32 +17,40 @@
                     </div>
                 </div>
 
-                <div class="col-md-4 login-box" v-if="isLogin">
-                    <div class="login-title">欢迎您，
-                        <router-link class="default-link" to="/user/center">{{user.name}}</router-link>
+                <div class="col-md-4" style="padding-right: 0;padding-top: 1.5%">
+                    <div class="login-bar" v-if="isLogin">
+                        <div class="login-title">欢迎您，
+                            <router-link class="default-link" to="/user/center">{{user.name}}</router-link>
+                        </div>
+                        <DropDown :dropDown="dropDown" class="admin" style="margin: 0 10px;">
+                            <li slot="dropLi" v-for="item in newMenu">
+                                <router-link :to="`${item.path}`"> {{item.text}}</router-link>
+                            </li>
+                        </DropDown>
+                        <a href="javascript:void(0)" @click="toLogout" class="btn btn-danger">注销</a>
                     </div>
-                    <DropDown :dropDown="dropDown" class="admin">
-                        <li slot="dropLi" v-for="item in menu">
-                            <router-link :to="`${item.path}`"> {{item.text}}</router-link>
-                        </li>
-                    </DropDown>
-                    <a href="javascript:void(0)" @click="toLogout" class="btn btn-danger">注销</a>
-                </div>
-                <div class="col-md-4 login-register" style="padding-top: 48px;" v-else>
-                    <a href="javascript:void(0)" @click="toLogin" class="btn btn-default">登录</a>
-                    <a href="javascript:void(0)" @click="toRegister" class="btn btn-danger" style="margin-left: 10px;">注册</a>
+                    <div class="login-bar" v-else>
+                        <a href="javascript:void(0)" @click="toLogin" class="btn btn-default">登录</a>
+                        <a href="javascript:void(0)" @click="toRegister" class="btn btn-danger" style="margin-left: 10px;">注册</a>
+                    </div>
+                    <Cart></Cart>
                 </div>
             </div>
         </div>
-        <nav class="navbar navbar-default navbar-custom " role="navigation">
-            <div class="container">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <router-link :to="{path:'/'}"> 首页</router-link>
+        <!--导航-->
+        <div class="bread-inner">
+            <div class="container bread-inner-bar">
+                <ol class="breadcrumb">
+                    <li v-for="(item,$index) in navBread">
+                        <template v-if="$index===navBread.length-1">
+                            {{item.name}}
+                        </template>
+                        <router-link v-else :to="`${item.path}`">{{item.name}}</router-link>
                     </li>
-                </ul>
+                </ol>
             </div>
-        </nav>
+        </div>
+        <!--登录或注册dialog-->
         <Modal :modal="modal">
             <div slot="content" :id="id">
                 <div class="form-group">
@@ -68,6 +76,8 @@
                 </div>
             </div>
         </Modal>
+        <button @click="clickVuex">vuex</button>
+        {{$store.state.author}}
     </div>
 
 </template>
@@ -75,6 +85,7 @@
 <script>
     import DropDown from './DropDown';
     import Modal from './Modal';
+    import Cart from './Cart';
     import axios from 'axios';
     import * as utils from '../utils/utils';
 
@@ -83,10 +94,6 @@
         data() {
             return {
                 menu: [
-                    {
-                        'text': '首页',
-                        'path': '/',
-                    },
                     {
                         'text': '所有商品',
                         'path': '/product/all',
@@ -103,11 +110,13 @@
                         'text': '新增分类',
                         'path': '/category/add',
                     },
-
+                    {
+                        'text': '返回首页',
+                        'path': '/',
+                    }
                 ],
                 dropDown: {
                     title: '后台管理',
-                    position: 'right'
                 },
                 isLogin: false,
                 id: '',
@@ -123,6 +132,7 @@
                     password: '',
                     email: ''
                 },
+                userRole: 0,
                 error: {
                     show: false,
                     msg: ''
@@ -130,15 +140,50 @@
                 disabled: true
             }
         },
+
         mounted() {
             axios.get('/api/users/session?t=' + Date.now()).then(res => {
                 if (res.data.code === 200) {
                     this.isLogin = true;
                     this.user.name = res.data.data.name;
+                    this.userRole = res.data.data.role;
+                    this.$store.dispatch('updateActionsUser', {isLogin: true, userRole: res.data.data.role, userName: res.data.data.name});
+                } else {
+                    this.$router.push('/');
                 }
             }).catch(err => {
                 console.log(err);
-            })
+            });
+        },
+        computed: {
+            newMenu: function () {
+                if (this.$store.state.userInfo.userRole < 10) {
+                    return [
+                        {
+                            'text': '所有商品',
+                            'path': '/user/center',
+                        },
+                        {
+                            'text': '商品列表',
+                            'path': '/user/center',
+                        },
+                        {
+                            'text': '商品录入',
+                            'path': '/user/center',
+                        },
+                        {
+                            'text': '新增分类',
+                            'path': '/user/center',
+                        },
+                        {
+                            'text': '返回首页',
+                            'path': '/',
+                        }
+                    ]
+                } else {
+                    return this.menu;
+                }
+            }
         },
         methods: {
             toLogin() {
@@ -168,7 +213,7 @@
                 if (this.$refs.userEmail.style.display === "block") {
                     axios.post('/api/users/register', this.user).then(res => {
                         if (res.data.code === 200) {
-                            this.$router.push('/success');
+                            this.$router.push({name: 'Success', params: {msg: res.data.desc}});
                         } else {
                             this.error.show = true;
                             this.error.msg = res.data.desc;
@@ -179,8 +224,11 @@
                 } else {
                     axios.post('/api/users/login', this.user).then(res => {
                         if (res.data.code === 200) {
+                            console.log(this.$store.state);
+                            this.userRole = res.data.data.role;
                             this.modal.show = false;
                             this.isLogin = true;
+                            this.$store.dispatch('updateActionsUser', {isLogin: true, userRole: res.data.data.role, userName: res.data.data.name});
                         } else {
                             this.error.show = true;
                             this.error.msg = res.data.desc;
@@ -195,6 +243,8 @@
                     if (res.data.code === 200) {
                         this.isLogin = false;
                         this.user.name = '';
+                        this.$router.push('/');
+                        this.$store.dispatch('updateActionsUser', {isLogin: false, userRole: 0, userName: ''});
                     }
                 }).catch(err => {
                     console.log(err);
@@ -260,14 +310,20 @@
                 for (let i in newArray) {
                     newArray[i] === "" ? this.disabled = true : this.disabled = false;
                 }
-            }
+            },
+            clickVuex() {
+                this.$store.commit('change', new Date())
+            },
         },
-        components: {DropDown, Modal}
+        components: {DropDown, Modal,Cart},
+        props: ['navBread', 'cartId']
     }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+    @import '../assets/style/_flex';
+
     .navbar-custom {
         border-radius: 0;
         background: #e4393c;
@@ -302,7 +358,7 @@
         display: flex;
         justify-content: flex-end;
         padding-right: 0;
-
+        background: red;
     }
 
     .login-box {
@@ -332,5 +388,72 @@
 
     .error {
         color: #e4393c;
+    }
+
+    .bread-inner {
+        background: #e5e5e5;
+        margin-bottom: 15px;
+    }
+
+    .breadcrumb {
+        margin: 0;
+        padding: 15px;
+        background: none;
+        a {
+            color: #333;
+            &:hover {
+                color: #e4393c;
+                text-decoration: underline;
+            }
+        }
+    }
+
+    .login-bar {
+        @include flex-box;
+        @include justify-content(flex-end);
+        @include align-items(center);
+    }
+
+    .bread-inner-bar {
+        padding-left: 0;
+    }
+
+    .saleCar {
+        float: right;
+        position: relative;
+        margin: 15px 0;
+        width: 150px;
+        height: 34px;
+        background-color: #fff;
+        @extend .login-bar;
+        @include justify-content(center);
+        border: 1px solid #adadad;
+        cursor: pointer;
+        color: #e02f2f;
+        em {
+            background: url("/static/svg/sale-car.svg") center no-repeat;
+            width: 20px;
+            height: 20px;
+            background-size: contain;
+            display: inline-block;
+            margin-right: 5px;
+        }
+        i {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 1px solid #e02f2f;
+            display: inline-block;
+            right: 5px;
+            top: 2px;
+            background: #e02f2f;
+            color: #fff;
+            font-size: 12px;
+            font-style: normal;
+            text-align: center;
+            line-height: 18px;
+        }
+
     }
 </style>

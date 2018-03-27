@@ -106,7 +106,6 @@
                     // console.log('满足条件', this.$route.params, this.userInfo.password);
                     axios.post('/api/users/savePassword', Object.assign(this.$route.params, {password: this.userInfo.password})).then(res => {
                         if (res.data.code === 200) {
-                            console.log(res);
                             this.$router.push({name: 'Success', params: {msg: '保存成功，去登录吧!'}});
                         }
                     }).catch(err => {

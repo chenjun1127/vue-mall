@@ -1,0 +1,201 @@
+<template>
+    <div class="cart" @mouseenter="mouseEnter" @mouseleave="mouseLeave">
+        <em></em>
+        <span>我的购物车</span>
+        <i>{{$store.state.cartList.length}}</i>
+        <div class="cartBox" :style="{'display':show ? 'block':'none'}">
+            <ul v-if="hasGoods">
+                <li v-for="item in goodList" :key="item.id">
+                    <div>{{item.name}}</div>
+                    <p>
+                        <span>￥{{_formatPrice(item.price)}} × {{item.sum}}</span>
+                        <a href="javascript:void(0)" @click="del(item.id,item.sum)">删除</a>
+                    </p>
+                </li>
+            </ul>
+            <div v-else class="noCart">购物车还没有商品，去选购吧！</div>
+        </div>
+    </div>
+</template>
+
+<script>
+    import {formatPrice} from "../utils/utils";
+
+    export default {
+        name: "cart",
+        data() {
+            return {
+                show: false,
+                goodList: 0,
+                hasGoods: false,
+            }
+        },
+        mounted() {
+            if (localStorage.getItem('cartList')) {
+                let list = JSON.parse(localStorage.getItem('cartList'));
+                this.$store.dispatch('updateActionsCart', list);
+            }
+        },
+        methods: {
+            mouseEnter() {
+                this.show = true;
+                this._unique();
+            },
+            mouseLeave() {
+                this.show = false;
+            },
+            del(id, sum) {
+                let list = JSON.parse(localStorage.getItem('cartList'));
+                for (let i = 0; i < list.length; i++) {
+                    if (list[i].id.indexOf(id) > -1) {
+                        list.splice(i, sum);
+                    }
+                }
+                this.$store.dispatch('updateActionsCart', list);
+                localStorage.setItem('cartList', JSON.stringify(list));
+            },
+            _unique() {
+                const list = this.$store.state.cartList;
+                this.hasGoods = true;
+                const newList = [];
+                const listMap = {};
+                // 计算数组中重复值，及个数
+                for (let i = 0, len = list.length, key; i < len; i++) {
+                    key = list[i].id + '||' + list[i].name + '||' + list[i].price; // key为id和name的组合，值为number
+                    if (listMap[key]) {
+                        listMap[key]++;
+                    } else {
+                        listMap[key] = 1;
+                    }
+                }
+                for (let item in listMap) {
+                    newList.push({
+                        id: item.split('||')[0],
+                        name: item.split('||')[1],
+                        price: item.split('||')[2],
+                        sum: listMap[item]
+                    })
+                }
+                this.goodList = newList;
+                this.hasGoods = newList.length > 0 ? true : false;
+            },
+            _formatPrice(number) {
+                return formatPrice(number);
+            }
+        }
+    }
+</script>
+
+<style scoped lang="scss">
+    @import '../assets/style/_flex';
+
+    .cart {
+        float: right;
+        position: relative;
+        margin: 15px 0;
+        width: 150px;
+        height: 34px;
+        background-color: #F9F9F9;
+        @include flex-box;
+        @include align-items(center);
+        @include justify-content(center);
+        border: 1px solid #dfdfdf;
+        cursor: pointer;
+        color: #e02f2f;
+        em {
+            background: url("/static/svg/sale-car.svg") center no-repeat;
+            width: 20px;
+            height: 20px;
+            background-size: contain;
+            display: inline-block;
+            margin-right: 5px;
+        }
+        i {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 1px solid #e02f2f;
+            display: inline-block;
+            right: 5px;
+            top: 2px;
+            background: #e02f2f;
+            color: #fff;
+            font-size: 12px;
+            font-style: normal;
+            text-align: center;
+            line-height: 18px;
+        }
+        &:hover {
+            background-color: #fff;
+            box-shadow: 0 0 4px rgba(0, 0, 0, .2);
+            .cartBox {
+                box-shadow: 0 0 4px rgba(0, 0, 0, .2);
+            }
+            &::before {
+                bottom: -2px;
+                background: #fff;
+            }
+        }
+        &::before {
+            content: "";
+            display: block;
+            width: 100%;
+            height: 5px;
+            background: #f9f9f9;
+            font-size: 0;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            z-index: 1001;
+            transition: all .25ms;
+        }
+    }
+
+    .cartBox {
+        position: absolute;
+        right: -1px;
+        top: 32px;
+        width: 400px;
+        border: 1px solid #d9d9d9;
+        background: #fff;
+        display: none;
+        z-index: 1000;
+        ul {
+            padding: 0;
+            margin: 0;
+            li {
+                list-style: none;
+                @include flex-box;
+                @include align-items(center);
+                margin: 0 10px;
+                border-bottom: darkgray dashed 1px;
+                padding: 10px 0;
+                p {
+                    margin: 0;
+                    width: 32%;
+                    @include flex-box;
+                    @include align-items(flex-end);
+                    @include justify-content(center);
+                    @include flex-direction(column);
+                }
+                div {
+                    @include flex(1);
+                    color: #333;
+                }
+                &:last-child {
+                    border-bottom: none;
+                }
+            }
+        }
+    }
+
+    .noCart {
+        text-align: center;
+        padding: 15px;
+        color: #999;
+        @include flex-box;
+        @include align-items(center);
+        @include justify-content(center);
+    }
+</style>

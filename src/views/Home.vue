@@ -1,17 +1,15 @@
 <template>
-    <div class="container-fluid">
-        <Header></Header>
+    <div>
+        <Header :navBread="navBread" cartId="cart"></Header>
         <div class="container">
             <div class="row">
                 <div class="col-md-3 card" v-for="item in productList">
                     <div class="card-content">
-                        <router-link :to="{path:'/product/detail',query: {id: item._id}}">
-                            <div class="card-img"><img class="card-img-top" v-lazy="`/static/images/${item.image}`" alt=""></div>
-                            <h4 class="card-title">{{item.name}}</h4>
-                        </router-link>
-                        <p class="card-text">价格：<em>￥</em><span>{{formatPrice(item.price)}}</span></p>
+                        <div class="card-img" id="tt"><img class="card-img-top" v-lazy="`/static/images/${item.image}`"></div>
+                        <h4 class="card-title">{{item.name}}</h4>
+                        <p class="card-text">价格：<em>￥</em><span>{{_formatPrice(item.price)}}</span></p>
                         <p class="card-text">库存：{{item.amount}}</p>
-                        <router-link class="btn btn-danger pay-btn" :to="{path:'/product/detail',query: {id: item._id}}">立即购买</router-link>
+                        <button class="btn btn-danger pay-btn" @click="addCart(item._id,item.name,item.price)">立即购买</button>
                     </div>
                 </div>
             </div>
@@ -23,6 +21,7 @@
 <script>
     import axios from 'axios'
     import Header from '../components/Header';
+    import {formatPrice, sortByUp} from "../utils/utils";
 
     export default {
         name: 'index',
@@ -30,7 +29,13 @@
             return {
                 msg: 1,
                 ok: false,
-                productList: []
+                productList: [],
+                navBread: [
+                    {
+                        path: '/',
+                        name: '首页'
+                    }
+                ]
             }
         },
         mounted() {
@@ -48,13 +53,28 @@
                     console.log(err);
                 })
             },
-            formatPrice(number) {
-                return parseFloat(number).toFixed(2).replace(/(\d{1,3})(?=(\d{3})+(?:\.))/g, "$1,");
+            _formatPrice(number) {
+                return formatPrice(number);
+            },
+            addCart(id, name, price) {
+                if (this.$store.state.userInfo.isLogin) {
+                    if (localStorage.getItem('cartList')) {
+                        let list = JSON.parse(localStorage.getItem('cartList'));
+                        let newList = [...list, ...[{id, name, price}]];
+                        // 排序后的数组
+                        const sortedNewList = sortByUp(newList, 'price');
+                        localStorage.setItem('cartList', JSON.stringify(sortedNewList));
+                        this.$store.dispatch('updateActionsCart', sortedNewList);
+                    } else {
+                        this.$store.dispatch('updateActionsCart', [{id, name, price}]);
+                        localStorage.setItem('cartList', JSON.stringify([{id, name, price}]));
+                    }
+                } else {
+                    this.$router.push({path: '/login'});
+                }
             }
         },
-
         components: {Header}
-
     }
 </script>
 

@@ -3,9 +3,10 @@ const router = express.Router();
 const User = require('../models/user');
 const sendMail = require('../utils/sendMail');
 const createCode = require('../utils/tools');
+const {requiredLogin, requiredAdmin} = require('../middleware/auth');
 
 // 获取session状态
-router.get('/session', (req, res) => {
+router.get('/session',requiredLogin, (req, res) => {
     if (req.session.user) {
         res.json({code: 200, data: req.session.user});
     } else {
@@ -30,7 +31,7 @@ router.post('/login', (req, res) => {
                     req.session.user = user;
                     // console.log(req.session);
                     // console.log('登录成功:Password is matched');
-                    res.json({code: 200, desc: '登录成功'});
+                    res.json({code: 200, desc: '登录成功',data:user});
                 } else {
                     res.json({code: 403, desc: '登录失败，密码可能错误，请重新登录'});
                 }

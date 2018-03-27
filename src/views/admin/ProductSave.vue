@@ -1,6 +1,6 @@
 <template>
-    <div class="container-fluid">
-        <Header></Header>
+    <div>
+        <Header :navBread="navBread"></Header>
         <div class="container">
             <div class="alert alert-danger" v-show="isAlert">{{validateMsg}}</div>
             <form class="form-horizontal">
@@ -102,7 +102,19 @@
                     style: {
                         width: '400px',
                     }
-                }
+                },
+                navBread:[
+                    {
+                        path: '/',
+                        name: '首页'
+                    }, {
+                        path: '/product/list',
+                        name: '商品列表 '
+                    }, {
+                        path: '/',
+                        name: '商品修改'
+                    }
+                ]
             }
         },
         mounted() {

@@ -1,18 +1,18 @@
 <template>
-    <div class="container-fluid">
-        <Header></Header>
+    <div>
+        <Header :navBread="navBread"></Header>
         <div class="container">
             <div class="row">
                 <table class="table table-hover table-bordered">
                     <thead>
                     <tr>
-                        <th>序号</th>
+                        <th width="50">序号</th>
                         <th>名称</th>
-                        <th>时间</th>
+                        <th width="150">时间</th>
                         <th>价格</th>
                         <th>数量</th>
-                        <th>分类</th>
-                        <th>操作</th>
+                        <th width="80">分类</th>
+                        <th width="150">操作</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -48,7 +48,6 @@
     import Modal from '../../components/Modal';
     import axios from 'axios';
     import moment from 'moment';
-
     moment.locale('zh-cn');
 
     export default {
@@ -64,6 +63,15 @@
                     show: false
                 },
                 productId: '',
+                navBread:[
+                    {
+                        path: '/',
+                        name: '首页'
+                    }, {
+                        path: '/user/center',
+                        name: '商品列表 '
+                    }
+                ]
             }
         },
         mounted() {

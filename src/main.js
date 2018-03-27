@@ -3,17 +3,21 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import Vuex from 'vuex';
+import store from './vuex/store';
 import '@/assets/boostarop/css/bootstrap.min.css';
 import VueLazyLoad from 'vue-lazyload';
-Vue.config.productionTip = false
-Vue.use(VueLazyLoad,{
-    loading:'/static/loading-svg/loading-bars.svg'
-});
 
+Vue.config.productionTip = false
+Vue.use(VueLazyLoad, {
+    loading: '/static/loading-svg/loading-bars.svg'
+});
+Vue.use(Vuex)
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
-  template: '<App/>',
-  components: { App }
+    el: '#app',
+    store,
+    router,
+    template: '<App/>',
+    components: {App}
 })
