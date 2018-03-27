@@ -1,9 +1,9 @@
 /**
- * Created by 0easy-23 on 2018/1/17
+ * Created by ChenJun on 2018/1/17
  */
 
 /**
- * @date:2018-03-27 13:52:17
+ * @dateTime:2018-03-27 13:52:17
  * @author:ChenJun
  * @desc:去除数组指定的元素，得到改变后的数组
  */
@@ -13,7 +13,7 @@ const removeByValue = (arr, val) => {
     return arr;
 };
 /**
- * @date:2018/03/27 13:53:07
+ * @dateTime:2018/03/27 13:53:07
  * @author:ChenJun
  * @desc:金额格式化
  */
@@ -22,7 +22,7 @@ const formatPrice = (number) => {
 };
 
 /**
- * @date:2018/03/27 13:50:33
+ * @dateTime:2018/03/27 13:50:33
  * @author:ChenJun
  * @desc:数组按对象的某个属性进行升序排序，降序则相反
  */
