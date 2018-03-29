@@ -36,7 +36,7 @@
                 goodList: 0,
                 hasGoods: false,
                 totalPrice: 0,
-                cartMsg: '',
+                cartMsg: ''
             }
         },
         mounted() {
