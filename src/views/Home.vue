@@ -7,7 +7,7 @@
                     <div class="card-content">
                         <div class="card-img" id="tt"><img class="card-img-top" v-lazy="`/static/images/${item.image}`"></div>
                         <h4 class="card-title">{{item.name}}</h4>
-                        <p class="card-text">价格：<em>￥</em><span>{{_formatPrice(item.price)}}</span></p>
+                        <p class="card-text">价格：<em>￥</em><span>{{formatPrice(item.price)}}</span></p>
                         <p class="card-text">库存：{{item.amount}}</p>
                         <button class="btn btn-danger pay-btn" @click="addCart(item._id,item.name,item.price)">立即购买</button>
                     </div>
@@ -21,7 +21,7 @@
 <script>
     import axios from 'axios'
     import Header from '../components/Header';
-    import {formatPrice, sortByUp} from "../utils/utils";
+    import {sortByUp} from "../utils/utils";
 
     export default {
         name: 'index',
@@ -52,9 +52,6 @@
                 }).catch(err => {
                     console.log(err);
                 })
-            },
-            _formatPrice(number) {
-                return formatPrice(number);
             },
             addCart(id, name, price) {
                 if (this.$store.state.userInfo.isLogin) {

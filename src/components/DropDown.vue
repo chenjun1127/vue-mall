@@ -104,11 +104,11 @@
         position: absolute;
         top: 100%;
         left: 0;
-        z-index: 1000;
         border-radius: 4px;
         -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
         box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
         min-width: 150px;
+        z-index: 3000;
     }
 
     .drop-menu li a {

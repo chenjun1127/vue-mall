@@ -19,7 +19,7 @@
                     <tr v-for="(item,index) in productList" :id="`tr_${item._id}`">
                         <td>{{index + 1}}</td>
                         <td>{{item.name}}</td>
-                        <td>{{moment(item.meta.updateAt)}}</td>
+                        <td>{{formatTime(item.meta.updateAt)}}</td>
                         <td>{{item.price}}</td>
                         <td>{{item.amount}}</td>
                         <td>{{item.category.name}}</td>
@@ -47,8 +47,6 @@
     import Header from '../../components/Header';
     import Modal from '../../components/Modal';
     import axios from 'axios';
-    import moment from 'moment';
-    moment.locale('zh-cn');
 
     export default {
         name: 'ProductList',
@@ -115,9 +113,6 @@
             },
             cancel() {
                 this.modal.show = false;
-            },
-            moment(date) {
-                return moment(date).format('YYYY-MM-DD HH:mm:ss');
             }
         },
         components: {Header, Modal}

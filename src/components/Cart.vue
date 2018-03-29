@@ -2,24 +2,31 @@
     <div class="cart" @mouseenter="mouseEnter" @mouseleave="mouseLeave">
         <em></em>
         <span>我的购物车</span>
-        <i>{{$store.state.cartList.length}}</i>
+        <i>{{$store.state.userInfo.isLogin ? $store.state.cartList.length : 0}}</i>
         <div class="cartBox" :style="{'display':show ? 'block':'none'}">
-            <ul v-if="hasGoods">
-                <li v-for="item in goodList" :key="item.id">
-                    <div>{{item.name}}</div>
+            <div v-if="hasGoods">
+                <ul>
+                    <li v-for="item in goodList" :key="item.id">
+                        <div>{{item.name}}</div>
+                        <p>
+                            <span>￥{{formatPrice(item.price)}} × {{item.sum}}</span>
+                            <a href="javascript:void(0)" @click="del(item.id,item.sum)">删除</a>
+                        </p>
+                    </li>
+                </ul>
+                <div class="cartTotal">
+                    <p>共{{$store.state.cartList.length}}件商品，总计￥<span>{{formatPrice(totalPrice)}}</span>元</p>
                     <p>
-                        <span>￥{{_formatPrice(item.price)}} × {{item.sum}}</span>
-                        <a href="javascript:void(0)" @click="del(item.id,item.sum)">删除</a>
+                        <router-link to="/toCart">去购物车</router-link>
                     </p>
-                </li>
-            </ul>
-            <div v-else class="noCart">购物车还没有商品，去选购吧！</div>
+                </div>
+            </div>
+            <div v-else class="noCart">{{cartMsg}}</div>
         </div>
     </div>
 </template>
 
 <script>
-    import {formatPrice} from "../utils/utils";
 
     export default {
         name: "cart",
@@ -28,6 +35,8 @@
                 show: false,
                 goodList: 0,
                 hasGoods: false,
+                totalPrice: 0,
+                cartMsg: '',
             }
         },
         mounted() {
@@ -39,7 +48,7 @@
         methods: {
             mouseEnter() {
                 this.show = true;
-                this._unique();
+                this._createGoodsList();
             },
             mouseLeave() {
                 this.show = false;
@@ -53,10 +62,26 @@
                 }
                 this.$store.dispatch('updateActionsCart', list);
                 localStorage.setItem('cartList', JSON.stringify(list));
+                this._createGoodsList();
+            },
+            _createGoodsList() {
+                if (this.$store.state.userInfo.isLogin) {
+                    this._unique();
+                    this.hasGoods = this.goodList.length > 0 ? true : false;
+                    // 计算金额
+                    if (this.goodList && this.goodList.length > 0) {
+                        const priceArr = this.goodList.map(ele => parseFloat(ele.price) * ele.sum);
+                        this.totalPrice = priceArr.reduce((prev, next) => prev + next);
+                    } else {
+                        this.cartMsg = "购物车还没有商品，去选购吧！";
+                    }
+                } else {
+                    this.cartMsg = "当前未登录，去登录吧！";
+                    this.hasGoods = false;
+                }
             },
             _unique() {
                 const list = this.$store.state.cartList;
-                this.hasGoods = true;
                 const newList = [];
                 const listMap = {};
                 // 计算数组中重复值，及个数
@@ -77,10 +102,6 @@
                     })
                 }
                 this.goodList = newList;
-                this.hasGoods = newList.length > 0 ? true : false;
-            },
-            _formatPrice(number) {
-                return formatPrice(number);
             }
         }
     }
@@ -183,9 +204,7 @@
                     @include flex(1);
                     color: #333;
                 }
-                &:last-child {
-                    border-bottom: none;
-                }
+
             }
         }
     }
@@ -197,5 +216,24 @@
         @include flex-box;
         @include align-items(center);
         @include justify-content(center);
+    }
+
+    .cartTotal {
+        @include flex-box;
+        @include align-items(center);
+        @include justify-content(space-between);
+        padding: 10px;
+        padding-bottom: 0;
+        p {
+            &:last-child {
+                a {
+                    display: inline-block;
+                    background: #e02f2f;
+                    color: #fff;
+                    border-radius: 0.25rem;
+                    padding: 8px 15px;
+                }
+            }
+        }
     }
 </style>
