@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Header :navBread="navBread" cartId="cart"></Header>
+        <Header :navBread="navBread"></Header>
         <div class="container">
             <div class="row">
                 <div class="col-md-3 card" v-for="item in productList">
@@ -21,13 +21,12 @@
 <script>
     import axios from 'axios'
     import Header from '../components/Header';
-    import {sortByUp} from "../utils/utils";
+    import {sortByUp} from "../utils/index";
 
     export default {
         name: 'index',
         data() {
             return {
-                msg: 1,
                 ok: false,
                 productList: [],
                 navBread: [

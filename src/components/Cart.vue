@@ -66,7 +66,7 @@
             },
             _createGoodsList() {
                 if (this.$store.state.userInfo.isLogin) {
-                    this._unique();
+                    this.goodList = this._unique();
                     this.hasGoods = this.goodList.length > 0 ? true : false;
                     // 计算金额
                     if (this.goodList && this.goodList.length > 0) {
@@ -101,7 +101,7 @@
                         sum: listMap[item]
                     })
                 }
-                this.goodList = newList;
+                return newList;
             }
         }
     }

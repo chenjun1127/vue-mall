@@ -17,7 +17,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-4" style="padding-right: 0;padding-top: 1.5%">
+                <div class="col-md-4" :style="{'padding-right': 0,'padding-top': !showCart? '1.5%':'4%'}">
                     <div class="login-bar" v-if="isLogin">
                         <div class="login-title">欢迎您，
                             <router-link class="default-link" to="/user/center">{{user.name}}</router-link>
@@ -33,7 +33,8 @@
                         <a href="javascript:void(0)" @click="toLogin" class="btn btn-default">登录</a>
                         <a href="javascript:void(0)" @click="toRegister" class="btn btn-danger" style="margin-left: 10px;">注册</a>
                     </div>
-                    <Cart></Cart>
+
+                    <Cart v-show="!showCart"></Cart>
                 </div>
             </div>
         </div>
@@ -70,16 +71,13 @@
             </div>
             <div slot="footer" class="footer">
                 <a href="javascript:void(0)" @click="toPassword" class="default-link" ref="forget">忘记密码？</a>
-                <div class="btns">
+                <div class="btn">
                     <button class="btn btn-default" @click="cancel">取消</button>
                     <button class="btn btn-danger" @click="enter" :disabled="disabled">确定</button>
                 </div>
             </div>
         </Modal>
-        <button @click="clickVuex">vuex</button>
-        {{$store.state.author}}
     </div>
-
 </template>
 
 <script>
@@ -87,7 +85,7 @@
     import Modal from './Modal';
     import Cart from './Cart';
     import axios from 'axios';
-    import * as utils from '../utils/utils';
+    import * as utils from '../utils/index';
 
     export default {
         name: 'Header',
@@ -137,7 +135,7 @@
                     show: false,
                     msg: ''
                 },
-                disabled: true
+                disabled: true,
             }
         },
 
@@ -154,6 +152,7 @@
             }).catch(err => {
                 console.log(err);
             });
+
         },
         computed: {
             newMenu: function () {
@@ -224,7 +223,7 @@
                 } else {
                     axios.post('/api/users/login', this.user).then(res => {
                         if (res.data.code === 200) {
-                            console.log(this.$store.state);
+                            // console.log(this.$store.state);
                             this.userRole = res.data.data.role;
                             this.modal.show = false;
                             this.isLogin = true;
@@ -311,12 +310,9 @@
                     newArray[i] === "" ? this.disabled = true : this.disabled = false;
                 }
             },
-            clickVuex() {
-                this.$store.commit('change', new Date())
-            },
         },
-        components: {DropDown, Modal,Cart},
-        props: ['navBread', 'cartId']
+        components: {DropDown, Modal, Cart},
+        props: ['navBread', 'showCart']
     }
 </script>
 

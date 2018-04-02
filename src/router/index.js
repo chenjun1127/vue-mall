@@ -12,8 +12,9 @@ import Login from '@/views/Login'
 import UserCenter from '@/views/user/Center'
 import UserPassword from '@/views/user/Password'
 import GetBack from '@/views/user/GetBack'
+import ToCart from '@/views/ToCart'
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
     routes: [
@@ -76,6 +77,11 @@ export default new Router({
             path: '/fail',
             name:'Fail',
             component: Fail
+        },
+        {
+            path: '/toCart',
+            name:'toCart',
+            component: ToCart
         }
 
     ]

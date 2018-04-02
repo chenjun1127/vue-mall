@@ -1,7 +1,7 @@
 /**
  * Created by ChenJun on 2018/3/28
  */
-import {formatPrice} from "../utils/utils";
+import {formatPrice} from "../utils/index";
 import moment from 'moment';
 moment.locale('zh-cn');
 /**
