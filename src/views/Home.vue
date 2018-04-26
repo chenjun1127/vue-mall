@@ -53,17 +53,26 @@
                 })
             },
             addCart(id, name, price) {
+                let cartList = JSON.parse(localStorage.getItem('cartList'));
                 if (this.$store.state.userInfo.isLogin) {
-                    if (localStorage.getItem('cartList')) {
-                        let list = JSON.parse(localStorage.getItem('cartList'));
-                        let newList = [...list, ...[{id, name, price}]];
+                    if (cartList && cartList.length > 0) {
+                        let newList;
+                        for (let i in cartList) {
+                            console.log(id,cartList[i].id)
+                            if (id === cartList[i].id) {
+                                newList = [...cartList, ...[{id, name, price, checked: cartList[i].checked}]];
+                            } else {
+                                newList = [...cartList, ...[{id, name, price, checked: true}]];
+                            }
+                        }
                         // 排序后的数组
                         const sortedNewList = sortByUp(newList, 'price');
                         localStorage.setItem('cartList', JSON.stringify(sortedNewList));
                         this.$store.dispatch('updateActionsCart', sortedNewList);
                     } else {
-                        this.$store.dispatch('updateActionsCart', [{id, name, price}]);
-                        localStorage.setItem('cartList', JSON.stringify([{id, name, price}]));
+                        let list = [{id, name, price,checked:true}];
+                        this.$store.dispatch('updateActionsCart', list);
+                        localStorage.setItem('cartList', JSON.stringify(list));
                     }
                 } else {
                     this.$router.push({path: '/login'});

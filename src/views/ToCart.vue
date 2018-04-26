@@ -7,7 +7,9 @@
                 <table class="table table-hover table-bordered">
                     <thead>
                     <tr>
-                        <th>全选</th>
+                        <th>
+                            <div id="select-all"><span @click="selectAll" :class="['select', selectedAll?'selected':'']"></span></div>
+                        </th>
                         <th>商品</th>
                         <th>数量</th>
                         <th>价格</th>
@@ -17,7 +19,7 @@
                     </thead>
                     <tbody>
                     <tr v-for="(item) in goodList">
-                        <td>选择</td>
+                        <td><span @click="select(item)" v-model="item.checked" :class="['select', item.checked?'selected':'']"></span></td>
                         <td>{{item.name}}</td>
                         <td width="160">
                             <div class="input-group">
@@ -32,14 +34,28 @@
                     </tr>
                     </tbody>
                 </table>
+                <div class="price-sum">
+                    <p class="goods-sum">已选择 <span>{{goodsSum}}</span> 件商品</p>
+                    <p class="goods-price">总价：<span>￥{{formatPrice(goodsPriceTotal)}}</span></p>
+                    <a href="" class="ben btn-danger btn-lg">去结算</a>
+                </div>
             </div>
         </div>
+        <Modal :modal="modal">
+            <p slot="title">温馨提示</p>
+            <p slot="content" style="text-align: center">确定删除吗？</p>
+            <div slot="footer">
+                <button class="btn btn-default" @click="cancelDel">取消</button>
+                <button class="btn btn-danger" @click="enterDel">确定</button>
+            </div>
+        </Modal>
     </div>
 </template>
 
 <script>
     import Header from '../components/Header';
     import {sortByUp} from "../utils/index";
+    import Modal from '../components/Modal';
 
     export default {
         name: "toCart",
@@ -57,10 +73,22 @@
                     }
                 ],
                 goodList: [],
+                selectedAll: false,
+                goodsPriceTotal: 0,
+                goodsSum: 0,
+                modal: {
+                    title: '',
+                    style: {
+                        width: '400px',
+                    },
+                    show: false
+                },
+                delItem: '',
             }
         },
         mounted() {
             this.goodList = this._unique();
+            this.computedGoods(this.goodList);
         },
         methods: {
             _unique() {
@@ -69,13 +97,14 @@
                 const listMap = {};
                 // 计算数组中重复值，及个数
                 for (let i = 0, len = list.length, key; i < len; i++) {
-                    key = list[i].id + '||' + list[i].name + '||' + list[i].price; // key为id和name的组合，值为number
+                    key = list[i].id + '||' + list[i].name + '||' + list[i].price;  // key为id和name的组合，值为number
                     if (listMap[key]) {
                         listMap[key]++;
                     } else {
                         listMap[key] = 1;
                     }
                 }
+                // 根据个数，重新整理数组;
                 for (let item in listMap) {
                     newList.push({
                         id: item.split('||')[0],
@@ -84,22 +113,58 @@
                         sum: listMap[item]
                     })
                 }
+                let trueArr = [];
+                let falseArr = [];
+                if (!list || list.length <= 0) return;
+
+                for (let i = 0; i < list.length; i++) {
+                    if (list[i].checked) {
+                        trueArr.push({
+                            id: list[i].id,
+                            item: list[i]
+                        })
+                    } else {
+                        falseArr.push({
+                            id: list[i].id,
+                            item: list[i]
+                        })
+                    }
+                }
+                let newArr = [...trueArr, ...falseArr];
+                if (trueArr.length === 0) {
+                    for (let i = 0; i < newList.length; i++) {
+                        newList[i].checked = false;
+                        this.selectedAll = false;
+                    }
+                } else if (falseArr.length === 0) {
+                    for (let i = 0; i < newList.length; i++) {
+                        newList[i].checked = true;
+                        this.selectedAll = true;
+                    }
+                } else {
+                    this.selectedAll = false;
+                    for (let i = 0; i < newList.length; i++) {
+                        for (let j in newArr) {
+                            if (newArr[j].id === newList[i].id) {
+                                newList[i].checked = newArr[j].item.checked;
+                            }
+                        }
+                    }
+                }
                 return newList;
             },
             minus(item) {
-                // 删除
+                // 减少
                 if (localStorage.getItem('cartList')) {
                     let list = JSON.parse(localStorage.getItem('cartList'));
                     let newObj = {
                         id: item.id,
                         name: item.name,
-                        price: parseFloat(item.price)
+                        price: parseFloat(item.price),
+                        checked: item.checked
                     };
-                    console.log(list)
                     for (let i in list) {
-                        console.log(i)
                         if (list[i].id === newObj.id) {
-                            console.log(i);
                             list.splice(i, 1);
                             break;
                         }
@@ -107,6 +172,7 @@
                     localStorage.setItem('cartList', JSON.stringify(list));
                     this.$store.dispatch('updateActionsCart', list);
                     this.goodList = this._unique();
+                    this.computedGoods(this.goodList);
                 }
             },
             add(item) {
@@ -116,16 +182,19 @@
                     let newObj = {
                         id: item.id,
                         name: item.name,
-                        price: parseFloat(item.price)
+                        price: parseFloat(item.price),
+                        checked: item.checked
                     };
                     let newList = [...list, ...[newObj]];
                     const sortedNewList = sortByUp(newList, 'price');
                     localStorage.setItem('cartList', JSON.stringify(sortedNewList));
                     this.$store.dispatch('updateActionsCart', sortedNewList);
                     this.goodList = this._unique();
+                    this.computedGoods(this.goodList);
                 }
             },
             blur(item, e) {
+                // 失去焦点
                 if (localStorage.getItem('cartList')) {
                     let list = JSON.parse(localStorage.getItem('cartList'));
                     const sum = e.target.value;
@@ -134,7 +203,8 @@
                         newArr.push({
                             id: item.id,
                             name: item.name,
-                            price: parseFloat(item.price)
+                            price: parseFloat(item.price),
+                            checked: item.checked
                         })
                     }
                     const arr = [];
@@ -145,30 +215,107 @@
                     }
                     // 点击加号或减号与当前商品数量的差值
                     const keepSum = newArr.length - arr.length;
+                    let sortedNewList;
                     if (keepSum === 0) {
                         return false;
                     } else if (keepSum > 0) {
                         newArr.splice(keepSum);
                         let newList = [...list, ...newArr];
-                        const sortedNewList = sortByUp(newList, 'price');
-                        localStorage.setItem('cartList', JSON.stringify(sortedNewList));
-                        this.$store.dispatch('updateActionsCart', sortedNewList);
-                        this.goodList = this._unique();
+                        sortedNewList = sortByUp(newList, 'price');
+
                     } else {
-                        list.splice(arr[0],Math.abs(keepSum));
-                        const sortedNewList = sortByUp(list, 'price');
-                        localStorage.setItem('cartList', JSON.stringify(sortedNewList));
-                        this.$store.dispatch('updateActionsCart', sortedNewList);
-                        this.goodList = this._unique();
+                        list.splice(arr[0], Math.abs(keepSum));
+                        sortedNewList = sortByUp(list, 'price');
                     }
+                    localStorage.setItem('cartList', JSON.stringify(sortedNewList));
+                    this.$store.dispatch('updateActionsCart', sortedNewList);
+                    this.goodList = this._unique();
+                    this.computedGoods(this.goodList);
                 }
             },
-            del(item){
-                console.log(item)
+            del(item) {
+                // 删除
+                this.modal.show = true;
+                this.delItem = item;
+            },
+            cancelDel() {
+                this.modal.show = false;
+            },
+            enterDel() {
+                if (this.delItem && this.delItem !== '') {
+                    this.modal.show = false;
+                    let list = JSON.parse(localStorage.getItem('cartList'));
+                    const arr = [];
+                    for (let i in list) {
+                        if (list[i].id === this.delItem.id) {
+                            arr.push(i);
+                        }
+                    }
+                    list.splice(arr[0], arr.length);
+                    const sortedNewList = sortByUp(list, 'price');
+                    localStorage.setItem('cartList', JSON.stringify(sortedNewList));
+                    this.$store.dispatch('updateActionsCart', sortedNewList);
+                    this.goodList = this._unique();
+                    this.computedGoods(this.goodList);
+                }
+            },
+            select(item) {
+                let newList = this.goodList;
+                let cartList = this.$store.state.cartList;
+                for (let i in newList) {
+                    if (newList[i].id === item.id) {
+                        for (let j = 0; j < cartList.length; j++) {
+                            if (cartList[j].id === item.id) {
+                                cartList[j].checked = !item.checked;
+                            }
+                        }
+                    }
+                }
+                localStorage.setItem('cartList', JSON.stringify(cartList));
+                this.$store.dispatch('updateActionsCart', cartList);
+                this.goodList = this._unique();
+                this.computedGoods(this.goodList);
+            },
+            selectAll() {
+                // 全选
+                this.selectedAll = !this.selectedAll
+                let cartList = this.$store.state.cartList;
+                for (let i in cartList) {
+                    cartList[i].checked = this.selectedAll ? true : false;
+                }
+                localStorage.setItem('cartList', JSON.stringify(cartList));
+                this.$store.dispatch('updateActionsCart', cartList);
+                this.goodList = this._unique();
+                this.computedGoods(this.goodList);
+            },
+            // 计算总价
+            computedGoods(cartList) {
+                let selectedCart = [];
+                if (cartList && cartList.length > 0) {
+                    cartList.map((item) => {
+                        if (item.checked) {
+                            selectedCart.push(item);
+                        }
+                    })
+                }
+                if (selectedCart.length === 0) {
+                    this.goodsSum = 0;
+                    this.goodsPriceTotal = 0;
+                } else if (selectedCart.length > 1) {
+                    let s = 0, p = 0;
+                    selectedCart.map((item) => {
+                        s += item.sum;
+                        p += item.sum * item.price;
+                        this.goodsSum = s;
+                        this.goodsPriceTotal = p;
+                    })
+                } else {
+                    this.goodsSum = selectedCart[0].sum;
+                    this.goodsPriceTotal = selectedCart[0].sum * selectedCart[0].price;
+                }
             }
         },
-        components: {Header},
-
+        components: {Header, Modal},
     }
 </script>
 
@@ -189,7 +336,88 @@
         vertical-align: middle;
     }
 
+    table tr th, table tr td {
+        &:first-child {
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center;
+        }
+        &:last-child {
+            text-align: center;
+        }
+    }
+
     .input-group-addon {
         cursor: pointer;
+    }
+
+    .select {
+        background: #FFF;
+        color: #fff;
+        border-radius: 50%;
+        height: 18px;
+        width: 18px;
+        display: inline-block;
+        position: relative;
+        cursor: pointer;
+        border: 1px solid #d9d9d9;
+        transition: all 0.25s;
+        &::before {
+            position: absolute;
+            content: "";
+            display: block;
+            width: 6px;
+            height: 2px;
+            font-size: 0;
+            line-height: 0;
+            left: 3px;
+            top: 8px;
+            background: #fff;
+            z-index: 1;
+            transform: rotate(45deg);
+        }
+        &::after {
+            position: absolute;
+            content: "";
+            display: block;
+            width: 8px;
+            height: 2px;
+            font-size: 0;
+            line-height: 0;
+            right: 2px;
+            top: 7px;
+            background: #fff;
+            z-index: 2;
+            transform: rotate(135deg);
+        }
+    }
+
+    .selected {
+        border-color: #d9534f;
+        background: #d9534f;
+        &::before {
+            background: #fff;
+        }
+        &::after {
+            background: #fff;
+        }
+    }
+
+    .select-all-em {
+        font-style: normal
+    }
+
+    .price-sum {
+        @include flex-box;
+        @include justify-content(flex-end);
+        @include align-items(center);
+        p {
+            margin: 0;
+            margin-right: 10px;
+        }
+        span {
+            color: #d9534f;
+            font-size: 18px;
+        }
     }
 </style>

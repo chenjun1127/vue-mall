@@ -33,7 +33,7 @@
             </div>
             <Modal :modal="modal">
                 <p slot="title">温馨提示</p>
-                <p slot="content" class="tips-danger">确定删除吗？</p>
+                <p slot="content" style="text-align: center">确定删除吗？</p>
                 <div slot="footer">
                     <button class="btn btn-default" @click="cancel">取消</button>
                     <button class="btn btn-danger" @click="enter">确定</button>
@@ -54,7 +54,7 @@
             return {
                 productList: [],
                 modal: {
-                    title: '确定删除吗？',
+                    title: '温馨提示',
                     style: {
                         width: '400px',
                     },
@@ -138,7 +138,4 @@
         }
     }
 
-    .tips-danger {
-        text-align: center;
-    }
 </style>
