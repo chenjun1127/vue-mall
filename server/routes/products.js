@@ -69,4 +69,20 @@ router.post('/delete', (req, res, next) => {
         res.json({code: 500, desc: '系统错误'});
     }
 });
+// 搜索
+router.get('/search', (req, res, next) => {
+    let searchText = req.query.searchText;
+    if (searchText) {
+        const regex = new RegExp(searchText, 'i');
+        Products.find({name: regex}, (err, products) => {
+            if (err) {
+                res.json({code: 403, desc: 'fail'});
+            } else {
+                res.json({code: 200, desc: 'success', data: products});
+            }
+        })
+    } else {
+        res.json({code: 500, desc: '系统错误'});
+    }
+});
 module.exports = router;

@@ -10,11 +10,8 @@ const store = new Vuex.Store({
     // 定义状态
     state: {
         author: 'jone-chen',
-        cartList: [], // 购物车列表,
-        userInfo: {
-            isLogin: false, // 是否登录
-            userRole: 0, // 权限控制
-        }
+        cartList: null, // 购物车列表,
+        userInfo: {isLogin: false}, // 是否登录}
     },
     mutations: {
         change(state, time) {
@@ -23,12 +20,8 @@ const store = new Vuex.Store({
         updateCart(state, obj) {
             state.cartList = obj;
         },
-        updateUserInfo(state, {userRole, userName, isLogin}) {
-            state.userInfo = {
-                isLogin,
-                userName,
-                userRole
-            }
+        updateUserInfo(state, obj) {
+            state.userInfo = Object.assign({}, obj);
         }
     },
     actions: {

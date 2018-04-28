@@ -20,7 +20,8 @@
     "morgan": "~1.8.1",
     "serve-favicon": "~2.4.2",
     "vue": "^2.5.2",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
@@ -41,6 +42,7 @@
     "express-session": "^1.15.6",
     "extract-text-webpack-plugin": "^3.0.0",
     "file-loader": "^1.1.4",
+    "formidable": "^1.2.1",
     "friendly-errors-webpack-plugin": "^1.6.1",
     "html-webpack-plugin": "^2.30.1",
     "mongoose": "^5.0.0-rc1",

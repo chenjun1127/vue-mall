@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Header :navBread="navBread"></Header>
+        <Header :navBread="navBread" ></Header>
         <div class="container">
             <div class="row">
                 <div class="col-md-12">

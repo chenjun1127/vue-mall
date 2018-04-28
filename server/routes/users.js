@@ -6,7 +6,7 @@ const createCode = require('../utils/tools');
 const {requiredLogin, requiredAdmin} = require('../middleware/auth');
 
 // 获取session状态
-router.get('/session',requiredLogin, (req, res) => {
+router.get('/session', requiredLogin, (req, res) => {
     if (req.session.user) {
         res.json({code: 200, data: req.session.user});
     } else {
@@ -31,7 +31,7 @@ router.post('/login', (req, res) => {
                     req.session.user = user;
                     // console.log(req.session);
                     // console.log('登录成功:Password is matched');
-                    res.json({code: 200, desc: '登录成功',data:user});
+                    res.json({code: 200, desc: '登录成功', data: user});
                 } else {
                     res.json({code: 403, desc: '登录失败，密码可能错误，请重新登录'});
                 }
@@ -100,5 +100,70 @@ router.post('/savePassword', (req, res) => {
         }
     });
 });
+// 获取个人信息
+router.get('/info', (req, res) => {
+    console.log(req.query)
+    User.findById(req.query.id, (err, user) => {
+        if (err) console.log(err);
+        if (user) {
+            res.json({code: 200, data: user});
+        } else {
+            res.json({code: 403, desc: '没有此用户'});
+        }
+    });
+});
+/**
+ * @dateTime:2018/04/28 09:55:12
+ * @author:ChenJun
+ * @desc:个人中心更新数据接口，包括上传图片
+ */
+const formidable = require('formidable');
+const moment = require('moment');
+const path = require('path');
+const fs = require('fs');
+router.post('/updateInfo', (req, res,next) => {
+    const form = new formidable.IncomingForm();
+    form.uploadDir = "./static/uploads";// 设置文件上传存放地址
+    form.parse(req, function (err, fields, files) {
+        // fields为其它的数据，files为文件
+        let headPic;
+        if (files && JSON.stringify(files) !== "{}") {
+            // 需要上传图片
+            const t = moment(new Date()).format('YYYY_MM_DD');
+            const timestamp = Date.now();
+            // 扩展名
+            const extname = path.extname(files.file.name);
+            // 旧的路径
+            const oldpath = path.join(__dirname, '../../', files.file.path);
+            // 文件名
+            headPic = t + '_' + timestamp + extname;
+            // 新的路径
+            const newpath = path.join(__dirname, '../../static/uploads/', headPic);
+            // 注意两个路径要一致
+            console.log(oldpath, newpath);
+            // 更改名字和路径
+            fs.rename(oldpath, newpath, (err) => {
+                if (err) {
+                    return res.json({
+                        "code": 401,
+                        "desc": "图片上传失败"
+                    })
+                }
+            });
+        }
 
+        User.findOne({name: fields.name}, (err, user) => {
+            if (err) console.log(err);
+            if (user) {
+                let _user = Object.assign(user, fields, headPic ? {img: headPic} : '');
+                _user.save((err) => {
+                    if (err) console.log(err);
+                    res.json({code: 200, desc: '保存成功'});
+                })
+            } else {
+                res.json({code: 403, desc: '没有此用户'});
+            }
+        });
+    })
+})
 module.exports = router;

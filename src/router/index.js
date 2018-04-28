@@ -13,6 +13,7 @@ import UserCenter from '@/views/user/Center'
 import UserPassword from '@/views/user/Password'
 import GetBack from '@/views/user/GetBack'
 import ToCart from '@/views/ToCart'
+import Search from '@/views/Search'
 
 Vue.use(Router);
 
@@ -82,6 +83,11 @@ export default new Router({
             path: '/toCart',
             name:'toCart',
             component: ToCart
+        },
+        {
+            path: '/search',
+            name:'Search',
+            component: Search
         }
 
     ]

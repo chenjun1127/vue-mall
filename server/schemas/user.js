@@ -27,6 +27,7 @@ var UserSchema = new mongoose.Schema({
         type:Boolean,
         default:false
     },
+    sign:String,
     meta: {
         createAt: {
             type: Date,

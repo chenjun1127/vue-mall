@@ -9,10 +9,10 @@
                     </div>
                 </div>
                 <div class="col-md-4" style="padding-top: 4%">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search for...">
+                    <div v-show="!showSearch" class="input-group">
+                        <input type="text" class="form-control" v-model="searchValue" @keyup.enter="toSearch" @blur="checkValue" placeholder="Search for...">
                         <span class="input-group-btn">
-                            <button class="btn btn-danger" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                            <button class="btn btn-danger" type="button"><span @click="toSearch" class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
                         </span>
                     </div>
                 </div>
@@ -128,14 +128,14 @@
                 user: {
                     name: '',
                     password: '',
-                    email: ''
+                    email: '',
                 },
-                userRole: 0,
                 error: {
                     show: false,
                     msg: ''
                 },
                 disabled: true,
+                searchValue: '',
             }
         },
 
@@ -144,19 +144,18 @@
                 if (res.data.code === 200) {
                     this.isLogin = true;
                     this.user.name = res.data.data.name;
-                    this.userRole = res.data.data.role;
-                    this.$store.dispatch('updateActionsUser', {isLogin: true, userRole: res.data.data.role, userName: res.data.data.name});
-                } else {
-                    this.$router.push('/');
+                    this.$store.dispatch('updateActionsUser', Object.assign({}, res.data.data, {isLogin: true}));
+                    sessionStorage.setItem('id',res.data.data._id);
                 }
             }).catch(err => {
                 console.log(err);
             });
-
+            this.defaultSearchValue();
         },
         computed: {
-            newMenu: function () {
-                if (this.$store.state.userInfo.userRole < 10) {
+            newMenu() {
+                const {role} = this.$store.state.userInfo;
+                if (role < 10) {
                     return [
                         {
                             'text': '所有商品',
@@ -182,9 +181,13 @@
                 } else {
                     return this.menu;
                 }
-            }
+            },
         },
         methods: {
+            defaultSearchValue() {
+                const arr = ['手机', '电子产品', '服装鞋帽', '3C家电', '夏普', '食品', '服饰包包'];
+                this.searchValue = arr[Math.floor(arr.length * Math.random())];
+            },
             toLogin() {
                 this.modal.show = true;
                 this.modal.title = "登录";
@@ -223,11 +226,10 @@
                 } else {
                     axios.post('/api/users/login', this.user).then(res => {
                         if (res.data.code === 200) {
-                            // console.log(this.$store.state);
-                            this.userRole = res.data.data.role;
                             this.modal.show = false;
                             this.isLogin = true;
-                            this.$store.dispatch('updateActionsUser', {isLogin: true, userRole: res.data.data.role, userName: res.data.data.name});
+                            this.$store.dispatch('updateActionsUser', Object.assign({}, res.data.data, {isLogin: true}));
+                            sessionStorage.setItem('id',res.data.data._id);
                         } else {
                             this.error.show = true;
                             this.error.msg = res.data.desc;
@@ -243,7 +245,8 @@
                         this.isLogin = false;
                         this.user.name = '';
                         this.$router.push('/');
-                        this.$store.dispatch('updateActionsUser', {isLogin: false, userRole: 0, userName: ''});
+                        this.$store.dispatch('updateActionsUser', {isLogin: false});
+                        sessionStorage.removeItem('id');
                     }
                 }).catch(err => {
                     console.log(err);
@@ -310,9 +313,24 @@
                     newArray[i] === "" ? this.disabled = true : this.disabled = false;
                 }
             },
+            checkValue() {
+                const val = this.searchValue;
+                let reg = /^\s*$/g;
+                if (val === '' || reg.test(this.searchValue)) {
+                    this.defaultSearchValue();
+                }
+
+            },
+            toSearch() {
+                const val = this.searchValue;
+                let reg = /^\s*$/g;
+                if (val !== '' || !reg.test(val)) {
+                    this.$router.push({name: 'Search', params: {text: this.searchValue}});
+                }
+            }
         },
         components: {DropDown, Modal, Cart},
-        props: ['navBread', 'showCart']
+        props: ['navBread', 'showCart', 'showSearch']
     }
 </script>
 
