@@ -23,7 +23,7 @@ router.post('/login', (req, res) => {
         if (!user) {
             res.json({code: 403, desc: '用户不存在，去注册吧'});
         } else {
-            // console.log('用户存在:' + name, password);
+            console.log('用户存在:' + name, password);
             user.comparePassword(password, (err, isMatch) => {
                 console.log(password, isMatch);
                 if (err) console.log(err);
@@ -42,7 +42,6 @@ router.post('/login', (req, res) => {
 // 注册接口
 router.post('/register', (req, res) => {
     let userObj = req.body;
-    console.log("userObj", userObj);
     User.findOne({name: userObj.name}, (err, user) => {
         if (err) console.log(err);
         if (user) {
@@ -68,7 +67,6 @@ router.post('/getBackPassword', (req, res) => {
     User.findOne({name: userObj.name}, (err, user) => {
         if (err) console.log(err);
         if (user) {
-            console.log(user.email, userObj.email);
             let identifyingCode = createCode();
             if (user.email === userObj.email) {
                 sendMail(userObj.email, '邮箱验证码', '您的验证码为：<b>' + identifyingCode + '</b>').then(sendRes => {
@@ -102,7 +100,6 @@ router.post('/savePassword', (req, res) => {
 });
 // 获取个人信息
 router.get('/info', (req, res) => {
-    console.log(req.query)
     User.findById(req.query.id, (err, user) => {
         if (err) console.log(err);
         if (user) {
@@ -121,7 +118,7 @@ const formidable = require('formidable');
 const moment = require('moment');
 const path = require('path');
 const fs = require('fs');
-router.post('/updateInfo', (req, res,next) => {
+router.post('/updateInfo', (req, res, next) => {
     const form = new formidable.IncomingForm();
     form.uploadDir = "./static/uploads";// 设置文件上传存放地址
     form.parse(req, function (err, fields, files) {
@@ -155,7 +152,7 @@ router.post('/updateInfo', (req, res,next) => {
         User.findOne({name: fields.name}, (err, user) => {
             if (err) console.log(err);
             if (user) {
-                let _user = Object.assign(user, fields, headPic ? {img: headPic} : '');
+                let _user = Object.assign(user, fields, headPic ? {img: headPic, firstSave: false} : '');
                 _user.save((err) => {
                     if (err) console.log(err);
                     res.json({code: 200, desc: '保存成功'});

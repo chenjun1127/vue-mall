@@ -37,7 +37,7 @@
                 <div class="price-sum">
                     <p class="goods-sum">已选择 <span>{{goodsSum}}</span> 件商品</p>
                     <p class="goods-price">总价：<span>￥{{formatPrice(goodsPriceTotal)}}</span></p>
-                    <a href="" class="ben btn-danger btn-lg">去结算</a>
+                    <router-link class="ben btn-danger btn-lg" to="/order">去结算</router-link>
                 </div>
             </div>
         </div>

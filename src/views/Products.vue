@@ -1,52 +1,60 @@
 <template>
-    <div style="padding: 100px;">
-        <div class="drop-wrap" v-click-outside="handleClose">
-            <a href="#" class="drop-btn" @click="show = !show">下拉 <span class="caret"></span></a>
-            <ul class="drop-menu" v-show='show'>
-                <li><a href="javascript:;">item1</a></li>
-                <li><a href="javascript:;">item2</a></li>
-                <li><a href="javascript:;">item3</a></li>
-                <li><a href="javascript:;">item4item4item4</a></li>
-            </ul>
+    <div>
+        <Header :navBread="navBread"></Header>
+        <div class="container">
+            <div class="row">
+                <h4 class="search-title">当前分类：{{$route.query.name}}</h4>
+                <Product :list="results"/>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
+    import Header from '../components/Header';
+    import axios from 'axios';
+    import Product from '../components/Product';
+
     export default {
-        name: 'DropDown',
+        name: 'product',
         data() {
             return {
-                show: false
-            }
-        },
-
-        methods: {
-            handleClose() {
-                this.show = false;
-            }
-        },
-        directives: {
-            clickOutside: {
-                bind(el, binding, vnode) {
-                    function documentHandler(e) {
-                        if (el.contains(e.target)) {
-                            return false;
-                        }
-                        if (binding.expression) {
-                            binding.value(e);
-                        }
+                navBread: [
+                    {
+                        path: '/',
+                        name: '首页'
+                    },
+                    {
+                        path: '/category/list',
+                        name: '分类列表'
+                    },
+                    {
+                        path: '/',
+                        name: '当前分类'
                     }
-
-                    el.__vueClickOutside__ = documentHandler;
-                    document.addEventListener('click', documentHandler);
-                },
-                unbind(el, binding) {
-                    document.removeEventListener('click', el.__vueClickOutside__);
-                    delete el.__vueClickOutside__;
-                }
+                ],
+                results:'',
+                noData:false,
             }
-        }
+        },
+        mounted() {
+            axios.get(`/api/categories/products?id=${this.$route.query.id}`).then(res=>{
+                if (res.data.code === 200) {
+                    if (res.data.data.length > 0) {
+                        this.results = res.data.data;
+                    } else {
+                        this.noData = true;
+                    }
+                } else {
+                    console.log("error:" + res.data.desc);
+                }
+            }).catch(err => {
+                console.log(err);
+            })
+        },
+        methods: {
+        },
+        components: {Header,Product}
     }
 </script>
 

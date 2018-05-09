@@ -3,6 +3,8 @@
         <Header :navBread="navBread"></Header>
         <div class="container">
             <Product :list="productList"/>
+            <Pagination :totalPage="totalPage" :pageSize="pageSize" :pageNo="pageNo" v-on:toPageClick="toPageClick" v-on:prevClick="prevClick"
+                        v-on:nextClick="nextClick"></Pagination>
             <div class="product-tips" v-show="ok">暂无商品</div>
         </div>
     </div>
@@ -12,19 +14,23 @@
     import axios from 'axios'
     import Header from '../components/Header';
     import Product from '../components/Product';
+    import Pagination from '../components/Pagination';
 
     export default {
         name: 'index',
         data() {
             return {
                 ok: false,
-                productList: '',
+                productList: [],
                 navBread: [
                     {
                         path: '/',
                         name: '首页'
                     }
-                ]
+                ],
+                totalPage: 0, // 总记录数
+                pageNo: 1, // 从第一页开始
+                pageSize: 8 // 每页几条数据
             }
         },
         mounted() {
@@ -32,10 +38,11 @@
         },
         methods: {
             getData() {
-                axios.get('/api/products?t=' + Date.now()).then(res => {
+                axios.get(`/api/products?pageNo=${this.pageNo}&pageSize=${this.pageSize}&t=${Date.now()}`).then(res => {
                     if (res.data.code === 200) {
+                        this.totalPage = res.data.count;
                         if (res.data.list.length > 0) {
-                            this.productList = res.data.list;
+                            this.productList = [...res.data.list];
                         } else {
                             this.ok = !this.ok;
                         }
@@ -46,8 +53,20 @@
                     console.log(err);
                 })
             },
+            prevClick(index) {
+                this.pageNo = index;
+                this.getData();
+            },
+            nextClick(index) {
+                this.pageNo = index;
+                this.getData();
+            },
+            toPageClick(index) {
+                this.pageNo = index;
+                this.getData();
+            }
         },
-        components: {Header, Product}
+        components: {Header, Product, Pagination}
     }
 </script>
 

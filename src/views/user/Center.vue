@@ -4,13 +4,14 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-2">
-                    <div class="headPic" :style="styleBgObj">
+                    <div class="headPic" ref="imgPreview" :style="styleBgObj">
                         <span>上传图像
                             <input type="file" id="uploadPic" name="file" accept="image/png,image/gif,image/jpeg" @change="getFile($event)">
                         </span>
                     </div>
-                    <div class="userName">{{user.name}}</div>
-                    <div class="time">{{time}}</div>
+                    <div class="userName">{{time}}好，{{user.name}}
+                        <div class="time"><span ref="time"></span></div>
+                    </div>
                 </div>
                 <div class="col-md-10">
                     <div class="row">
@@ -67,12 +68,9 @@
                             </form>
                         </div>
                     </div>
-
                 </div>
             </div>
-
         </div>
-
     </div>
 </template>
 
@@ -80,6 +78,7 @@
     import Header from '../../components/Header';
     import axios from 'axios';
     import {time} from '../../utils/time';
+    import Modal from '../../components/Modal';
 
     export default {
         name: "user-center",
@@ -106,15 +105,25 @@
                     img: '',
                 },
                 styleBgObj: 'backgroundImage: url(/static/images/default-head.png)',
-                time:''
+                time: '',
+                timer: null,
             }
         },
         mounted() {
             this.getData();
             this.time = time.toTimeString();
         },
+        created() {
+            if (this.timer) {
+                clearInterval(this.timer);
+            }
+            this.showTime();
+        },
+        beforeDestroy() {
+            clearInterval(this.timer);
+        },
         methods: {
-            getData(){
+            getData() {
                 if (sessionStorage.getItem('id')) {
                     axios.get(`/api/users/info?id=${sessionStorage.getItem('id')}&t=${Date.now()}`).then(res => {
                         if (res.data.code === 200) {
@@ -144,7 +153,7 @@
                 const config = {headers: {'Content-Type': 'multipart/form-data'}};
                 axios.post('/api/users/updateInfo', formData, config).then(res => {
                     if (res.data.code === 200) {
-                        this.getData();
+                        this.$router.push({name: 'Success', params: {msg: '保存成功'}});
                     } else {
                         console.log("error:" + res.data.desc);
                     }
@@ -154,10 +163,22 @@
             },
             getFile(event) {
                 this.file = event.target.files[0];
-                console.log(this.file);
+                const reader = new FileReader();
+                reader.readAsDataURL(this.file);
+                reader.onload = (e) => {
+                    this.$refs.imgPreview.style.backgroundImage = `url(${e.target.result})`;
+                }
             },
+            showTime() {
+                this.timer = setInterval(() => {
+                    const timeStr = new Date();
+                    const m = time.formatDigit(timeStr.getMonth() + 1);
+                    const t = timeStr.getFullYear() + "-" + m + "-" + time.formatDigit(timeStr.getDate()) + " " + time.formatDigit(timeStr.getHours()) + ":" + time.formatDigit(timeStr.getMinutes()) + ":" + time.formatDigit(timeStr.getSeconds());
+                    this.$refs.time.innerHTML = "当前时间:" + t;
+                }, 1000);
+            }
         },
-        components: {Header}
+        components: {Header, Modal}
     }
 </script>
 
@@ -194,6 +215,14 @@
 
     .userName {
         text-align: center;
+        position: relative;
+        .time {
+            bottom: -25px;
+            left: 0;
+            width: 150%;
+            text-align: left;
+            position: absolute;
+        }
     }
 
     #uploadPic {

@@ -1,38 +1,41 @@
 <template>
-    <div class="container">
-        <h3 class="title">找回密码</h3>
-        <div class="row">
-            <div class="col-md-12">
-                <form class="form-horizontal">
-                    <div class="form-group">
-                        <label class="col-md-2 control-label">用户名</label>
-                        <div class="col-md-10">
-                            <input type="text" class="form-control" name="userName" @blur="validate($event)" @focus="disappear" v-model="user.name" placeholder="请输入用户名">
+    <div>
+        <Header :navBread="navBread" showSearch="showSearch"></Header>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">用户名</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" name="userName" @blur="validate($event)" @focus="disappear" v-model="user.name" placeholder="请输入用户名">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-2 control-label">邮箱</label>
-                        <div class="col-md-10">
-                            <input type="email" class="form-control" name="userEmail" @blur="validate($event)" @focus="disappear" v-model="user.email" placeholder="请输入邮箱">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">邮箱</label>
+                            <div class="col-md-10">
+                                <input type="email" class="form-control" name="userEmail" @blur="validate($event)" @focus="disappear" v-model="user.email" placeholder="请输入邮箱">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group" v-show="error.show">
-                        <div class="col-md-offset-2 col-md-10 error">
-                            {{error.msg}}
+                        <div class="form-group" v-show="error.show">
+                            <div class="col-md-offset-2 col-md-10 error">
+                                {{error.msg}}
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <button type="button" @click="submit" class="btn btn-primary" :disabled="disabled">下一步</button>
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <button type="button" @click="submit" class="btn btn-danger" :disabled="disabled">下一步</button>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+    import Header from '../../components/Header';
     import axios from 'axios';
 
     export default {
@@ -47,7 +50,17 @@
                     show: false,
                     msg: ''
                 },
-                disabled: true
+                disabled: true,
+                navBread: [
+                    {
+                        path: '/',
+                        name: '首页'
+                    },
+                    {
+                        path: '/找回密码',
+                        name: '找回密码'
+                    }
+                ],
             }
         },
 
@@ -94,7 +107,8 @@
                     });
                 }
             }
-        }
+        },
+        components: {Header}
     }
 </script>
 

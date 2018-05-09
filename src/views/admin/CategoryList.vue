@@ -7,41 +7,36 @@
                     <thead>
                     <tr>
                         <th width="50">序号</th>
-                        <th width="500">名称</th>
-                        <th>时间</th>
-                        <th>价格</th>
-                        <th>数量</th>
-                        <th>分类</th>
-                        <th width="100">访问量(pv)</th>
-                        <th width="150">操作</th>
+                        <th>分类名称</th>
+                        <th>合计（{{sum}}）</th>
+                        <th>录入时间</th>
+                        <th width="210">操作</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(item,index) in productList" :id="`tr_${item._id}`">
+                    <tr v-for="(item,index) in categoryList" :id="`tr_${item._id}`">
                         <td>{{index + 1}}</td>
                         <td>{{item.name}}</td>
+                        <td>{{item.products.length}}</td>
                         <td>{{formatTime(item.meta.createAt)}}</td>
-                        <td>{{item.price}}</td>
-                        <td>{{item.amount}}</td>
-                        <td>{{item.category.name}}</td>
-                        <td>{{item.pv}}</td>
                         <td>
-                            <a href="javascript:void(0)" @click="toUpdate(item._id)" class="btn btn-success">修改</a>
+                            <a href="javascript:void(0)" @click="toLook(item._id,item.name)" class="btn btn-default">查看</a>
+                            <a href="javascript:void(0)" @click="toUpdate(item._id,item.name)" class="btn btn-success">修改</a>
                             <a href="javascript:void(0)" @click="toDelete(item._id)" class="btn btn-danger">删除</a>
                         </td>
                     </tr>
                     </tbody>
                 </table>
             </div>
-            <Modal :modal="modal">
-                <p slot="title">温馨提示</p>
-                <p slot="content" style="text-align: center">确定删除吗？</p>
-                <div slot="footer">
-                    <button class="btn btn-default" @click="cancel">取消</button>
-                    <button class="btn btn-danger" @click="enter">确定</button>
-                </div>
-            </Modal>
         </div>
+        <Modal :modal="modal">
+            <p slot="title">温馨提示</p>
+            <p slot="content" style="text-align: center">确定删除该分类吗？删除后该分类下数据也被删除</p>
+            <div slot="footer">
+                <button class="btn btn-default" @click="cancel">取消</button>
+                <button class="btn btn-danger" @click="enter">确定</button>
+            </div>
+        </Modal>
     </div>
 </template>
 
@@ -51,10 +46,22 @@
     import axios from 'axios';
 
     export default {
-        name: 'ProductList',
+        name: 'categoryList',
         data() {
             return {
-                productList: [],
+                name: '',
+                disabled: true,
+                navBread: [
+                    {
+                        path: '/',
+                        name: '首页'
+                    }, {
+                        path: '/',
+                        name: '分类列表'
+                    }
+                ],
+                categoryList: null,
+                categoryId: '',
                 modal: {
                     title: '温馨提示',
                     style: {
@@ -62,70 +69,60 @@
                     },
                     show: false
                 },
-                productId: '',
-                navBread:[
-                    {
-                        path: '/',
-                        name: '首页'
-                    }, {
-                        path: '/',
-                        name: '商品列表'
-                    }
-                ]
+                sum:0,
             }
         },
         mounted() {
-            this.getData();
+            this.getCategory();
         },
         methods: {
-            getData() {
-                axios.get('/api/products').then(res => {
-                    this.msg = res.data.code;
-                    if (res.data.list.length > 0) {
-                        this.productList = res.data.list;
-                    } else {
-                        this.ok = !this.ok;
-                    }
+            getCategory() {
+                axios.get('/api/categories').then(res => {
+                    console.log(res);
+                    this.categoryList = res.data.list;
+                    this.categoryList.map(item => {
+                        this.sum += item.products.length;
+                    })
                 }).catch(err => {
                     console.log(err);
                 })
             },
-            toUpdate(productId) {
-                this.$router.push({path: '/product/save?id=' + productId});
+            toLook(id, name) {
+                this.$router.push({path: '/category/products?id=' + id + '&name=' + name})
             },
-            toDelete(productId) {
+            toUpdate(id, name) {
+                this.$router.push({path: '/category/add?id=' + id + '&name=' + name})
+            },
+            toDelete(id) {
                 this.modal.show = true;
-                this.productId = productId;
+                this.categoryId = id;
+            },
+            cancel() {
+                this.modal.show = false;
             },
             enter() {
-                //  子组件传来的
-                axios.post('/api/products/delete', {id: this.productId}, {
+                axios.post('/api/categories/delete', {id: this.categoryId}, {
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
                     },
                 }).then(res => {
                     if (res.data.code === 200) {
                         this.modal.show = false;
-                        let child = document.getElementById('tr_' + this.productId);
+                        let child = document.getElementById('tr_' + this.categoryId);
                         child.parentNode.removeChild(child);
                     }
                 }).catch(err => {
                     console.log(err);
                 })
-            },
-            cancel() {
-                this.modal.show = false;
             }
         },
         components: {Header, Modal}
     }
-
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
     table tr {
-        th,td {
+        th, td {
             display: table-cell;
             vertical-align: middle;
             text-align: center;
@@ -135,14 +132,14 @@
             &:first-child, &:last-child {
                 text-align: center;
             }
-            &:nth-of-type(2){
+            &:nth-of-type(2) {
                 text-align: left;
             }
         }
         th:last-child {
             text-align: center;
         }
-
     }
 
 </style>
+

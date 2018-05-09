@@ -2,13 +2,22 @@ const express = require('express');
 const router = express.Router();
 const Products = require('../models/product');
 const {requiredLogin, requiredAdmin} = require('../middleware/auth');
-// 查询接口
+const Categories = require('../models/category');
+// 查询接口,分页查询
 router.get('/', (req, res, next) => {
-    Products.find({}).populate('category').exec((err, products) => {
+    // 默认10条，从第一页开始
+    const pageSize = parseInt(req.query.pageSize) === 0 || !req.query.pageSize ? 10 : parseInt(req.query.pageSize);
+    const pageNo =parseInt(req.query.pageNo) === 0 || !req.query.pageNo ? 1 : parseInt(req.query.pageNo);
+    let count = 0;
+    Products.count({}, (err, size) => {
+        if (err) console.log(err);
+        count = size;
+    });
+    Products.find({}).limit(pageSize).skip((pageNo - 1) * pageSize).populate({path: 'category', select: 'name'}).exec((err, products) => {
         if (err) {
             res.json({code: 403, desc: err.message});
         } else {
-            res.json({code: 200, desc: 'success', list: products});
+            res.json({code: 200, desc: 'success', count: count, list: products});
         }
     })
 });
@@ -19,23 +28,54 @@ router.post('/save', (req, res, next) => {
         Products.findById(req.body._id, (err, product) => {
             if (err) console.log(err);
             let _product = Object.assign(product, productObj);
-            _product.save((err) => {
-                if (err) {
-                    console.log(err)
-                    res.json({code: 403, desc: 'fail'});
+            const categoryId = _product.category;
+            // console.log(product._id, categoryId,_product._id);
+            Categories.findById(categoryId, (err, category) => {
+                if (err) console.log(err);
+                if (category.products.indexOf(_product._id) > -1) {
+                    return
                 } else {
-                    res.json({code: 200, desc: 'success'});
+                    category.products.push(_product._id);
                 }
+                category.save(err => {
+                    if (err) console.log(err);
+                });
+                // 删除
+                Categories.findOne({"products": _product._id}, (err, category) => {
+                    if (err) console.log(err);
+                    if (category && category.products.length > 0) {
+                        category.products.map((e, i) => {
+                            if (e.toString() === _product._id.toString()) {
+                                category.products.splice(i, 1)
+                            }
+                        });
+                        category.save(err => {
+                            if (err) console.log(err);
+                            console.log('保存成功');
+                        });
+                    }
+                })
+            });
+            _product.save((err) => {
+                err ? res.json({code: 403, desc: 'fail'}) : res.json({code: 200, desc: 'success'});
             })
         })
     } else {
         let products = new Products(req.body);
-        products.save((err) => {
-            if (err) {
-                res.json({code: 403, desc: 'fail'});
+        const categoryId = products.category;
+        Categories.findById(categoryId, (err, category) => {
+            if (err) console.log(err);
+            if (category.products.indexOf(products._id) > -1) {
+                return
             } else {
-                res.json({code: 200, desc: 'success'});
+                category.products.push(products._id);
             }
+            category.save(err => {
+                if (err) console.log(err);
+            });
+        });
+        products.save((err) => {
+            err ? res.json({code: 403, desc: 'fail'}) : res.json({code: 200, desc: 'success'});
         })
     }
 });

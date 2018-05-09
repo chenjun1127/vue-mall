@@ -24,7 +24,7 @@
                         </div>
                         <DropDown :dropDown="dropDown" class="admin" style="margin: 0 10px;">
                             <li slot="dropLi" v-for="item in newMenu">
-                                <router-link :to="`${item.path}`"> {{item.text}}</router-link>
+                                <router-link :to="`${item.path}`">{{item.text}}</router-link>
                             </li>
                         </DropDown>
                         <a href="javascript:void(0)" @click="toLogout" class="btn btn-danger">注销</a>
@@ -43,9 +43,7 @@
             <div class="container bread-inner-bar">
                 <ol class="breadcrumb">
                     <li v-for="(item,$index) in navBread">
-                        <template v-if="$index===navBread.length-1">
-                            {{item.name}}
-                        </template>
+                        <template v-if="$index===navBread.length-1">{{item.name}}</template>
                         <router-link v-else :to="`${item.path}`">{{item.name}}</router-link>
                     </li>
                 </ol>
@@ -93,10 +91,6 @@
             return {
                 menu: [
                     {
-                        'text': '所有商品',
-                        'path': '/product/all',
-                    },
-                    {
                         'text': '商品列表',
                         'path': '/product/list',
                     },
@@ -107,6 +101,10 @@
                     {
                         'text': '新增分类',
                         'path': '/category/add',
+                    },
+                    {
+                        'text': '分类列表',
+                        'path': '/category/list',
                     },
                     {
                         'text': '返回首页',
@@ -230,6 +228,7 @@
                             this.isLogin = true;
                             this.$store.dispatch('updateActionsUser', Object.assign({}, res.data.data, {isLogin: true}));
                             sessionStorage.setItem('id',res.data.data._id);
+                            this.$router.push({path: '/'});
                         } else {
                             this.error.show = true;
                             this.error.msg = res.data.desc;

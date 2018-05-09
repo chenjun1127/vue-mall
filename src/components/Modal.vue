@@ -8,7 +8,7 @@
                 .v-modal-body
                     .v-modal-inner
                         <slot name='content'></slot>
-                .v-modal-footer
+                .v-modal-footer(:style="modal.footerStyle")
                     <slot name='footer'></slot>
 </template>
 

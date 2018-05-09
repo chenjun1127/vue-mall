@@ -103,7 +103,7 @@
                         width: '400px',
                     }
                 },
-                navBread:[
+                navBread: [
                     {
                         path: '/',
                         name: '首页'
@@ -112,7 +112,7 @@
                         name: '商品列表 '
                     }, {
                         path: '/',
-                        name: '商品修改'
+                        name: '商品录入'
                     }
                 ]
             }
@@ -126,6 +126,7 @@
                 }).catch(err => {
                     console.log(err);
                 })
+                this.navBread[this.navBread.length - 1].name = "商品更新";
             }
             this.getCategory();
         },
@@ -156,7 +157,7 @@
                     },
                 }).then(res => {
                     if (res.data.code === 200) {
-                        this.$router.push({path: '/success'});
+                        this.$router.push({name: 'Success', params: {msg: '保存成功'}});
                     }
                 }).catch(err => {
                     console.log(err);
@@ -203,10 +204,7 @@
     }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
-
     .form-control-static a {
         color: #286090;
     }

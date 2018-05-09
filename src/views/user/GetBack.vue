@@ -1,39 +1,41 @@
 <template>
-    <div class="container">
-        <h3 class="title">找回密码</h3>
-        <div class="row">
-            <div class="col-md-12">
-                <form class="form-horizontal">
-                    <div class="form-group">
-                        <label class="col-md-2 control-label">请输入新密码</label>
-                        <div class="col-md-10">
-                            <input type="password" class="form-control" name="password" ref="password" v-model="userInfo.password" @blur="validate($event)"
-                                   @focus="disappear($event)">
+    <div>
+        <Header :navBread="navBread" showSearch="showSearch"></Header>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">请输入新密码</label>
+                            <div class="col-md-10">
+                                <input type="password" class="form-control" name="password" ref="password" v-model="userInfo.password" @blur="validate($event)"
+                                       @focus="disappear($event)">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-2 control-label">确认新密码</label>
-                        <div class="col-md-10">
-                            <input type="password" class="form-control" name="rePassword" ref="rePassword" @blur="validate($event)" @focus="disappear($event)">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">确认新密码</label>
+                            <div class="col-md-10">
+                                <input type="password" class="form-control" name="rePassword" ref="rePassword" @blur="validate($event)" @focus="disappear($event)">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-2 control-label">邮箱验证码</label>
-                        <div class="col-md-10">
-                            <input type="text" class="form-control" name="identifyingCode" ref="identifyingCode" @blur="validate($event)" @focus="disappear($event)">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">邮箱验证码</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" name="identifyingCode" ref="identifyingCode" @blur="validate($event)" @focus="disappear($event)">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group" v-show="error.show">
-                        <div class="col-md-offset-2 col-md-10 error">
-                            {{error.msg}}
+                        <div class="form-group" v-show="error.show">
+                            <div class="col-md-offset-2 col-md-10 error">
+                                {{error.msg}}
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <button type="button" class="btn btn-primary" :disabled="disabled" @click="submit">确定</button>
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <button type="button" class="btn btn-danger" :disabled="disabled" @click="submit">确定</button>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -41,7 +43,7 @@
 
 <script>
     import axios from 'axios';
-
+    import Header from '../../components/Header';
     export default {
         name: 'get-back',
         data() {
@@ -55,7 +57,17 @@
                 disabled: true,
                 userInfo: {
                     password: '',
-                }
+                },
+                navBread: [
+                    {
+                        path: '/',
+                        name: '首页'
+                    },
+                    {
+                        path: '/确认密码',
+                        name: '确认密码'
+                    }
+                ],
             }
         },
         methods: {
@@ -123,7 +135,8 @@
                     this.$refs.identifyingCode.classList.add('focus');
                 }
             }
-        }
+        },
+        components:{Header}
     }
 </script>
 

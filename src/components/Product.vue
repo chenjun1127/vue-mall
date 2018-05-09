@@ -23,7 +23,7 @@
                     if (cartList && cartList.length > 0) {
                         let newList;
                         for (let i in cartList) {
-                            console.log(id,cartList[i].id)
+                            // console.log(id,cartList[i].id);
                             if (id === cartList[i].id) {
                                 newList = [...cartList, ...[{id, name, price, checked: cartList[i].checked}]];
                             } else {

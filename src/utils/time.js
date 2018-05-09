@@ -24,6 +24,10 @@ class Time {
             return '晚上';
         }
     }
+    formatDigit(n) {
+        // 小于10补0
+        return n.toString().replace(/^(\d)$/, '0$1');
+    };
 }
 
 const time = new Time();
