@@ -13,27 +13,20 @@
 <script>
     export default {
         name: "pagination",
-        data() {
-            return {}
-        },
         mounted() {
             console.log(this.pageSize, this.pageNo)
         },
         methods: {
             prev() {
                 let pageNo = this.pageNo;
-                if (1 === pageNo) {
-                    return;
-                } else {
+                if (1 !== pageNo) {
                     pageNo--;
                     this.$emit('prevClick', pageNo);
                 }
             },
             next() {
                 let pageNo = this.pageNo;
-                if (this.pageSum === pageNo) {
-                    return;
-                } else {
+                if (this.pageSum !== pageNo) {
                     pageNo++;
                     this.$emit('nextClick', pageNo);
                 }
@@ -54,5 +47,25 @@
 <style scoped>
     .pagination-box {
         text-align: center
+    }
+
+    .pagination a {
+        color: #d9534f;
+    }
+
+    .pagination a:hover {
+        color: #d43f3a;
+    }
+
+    .pagination .active a {
+        background: #d9534f;
+        border-color: #d43f3a;
+        color: #fff;
+    }
+
+    .pagination .active a:hover {
+        background: #d43f3a;
+        border-color: #d43f3a;
+        color: #fff;
     }
 </style>

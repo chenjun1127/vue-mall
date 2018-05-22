@@ -6,7 +6,7 @@
                 <h4 class="card-title">{{item.name}}</h4>
                 <p class="card-text">价格：<em>￥</em><span>{{formatPrice(item.price)}}</span></p>
                 <p class="card-text">库存：{{item.amount}}</p>
-                <button class="btn btn-danger pay-btn" @click="addCart(item._id,item.name,item.price)">立即购买</button>
+                <button class="btn btn-danger pay-btn" @click="addCart(item._id,item.name,item.price,item.image)">立即购买</button>
             </div>
         </div>
     </div>
@@ -14,10 +14,11 @@
 
 <script>
     import {sortByUp} from "../utils/index";
+
     export default {
         name: "product",
-        methods:{
-            addCart(id, name, price) {
+        methods: {
+            addCart(id, name, price, image) {
                 let cartList = JSON.parse(localStorage.getItem('cartList'));
                 if (this.$store.state.userInfo.isLogin) {
                     if (cartList && cartList.length > 0) {
@@ -25,9 +26,9 @@
                         for (let i in cartList) {
                             // console.log(id,cartList[i].id);
                             if (id === cartList[i].id) {
-                                newList = [...cartList, ...[{id, name, price, checked: cartList[i].checked}]];
+                                newList = [...cartList, ...[{id, name, price, image, checked: cartList[i].checked}]];
                             } else {
-                                newList = [...cartList, ...[{id, name, price, checked: true}]];
+                                newList = [...cartList, ...[{id, name, price, image, checked: true}]];
                             }
                         }
                         // 排序后的数组
@@ -35,7 +36,7 @@
                         localStorage.setItem('cartList', JSON.stringify(sortedNewList));
                         this.$store.dispatch('updateActionsCart', sortedNewList);
                     } else {
-                        let list = [{id, name, price,checked:true}];
+                        let list = [{id, name, price, image, checked: true}];
                         this.$store.dispatch('updateActionsCart', list);
                         localStorage.setItem('cartList', JSON.stringify(list));
                     }
@@ -44,7 +45,7 @@
                 }
             }
         },
-        props:['list']
+        props: ['list']
     }
 </script>
 

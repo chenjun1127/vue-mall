@@ -48,7 +48,6 @@
             }
         },
         mounted() {
-            console.log(this.$route.query.id, this.$route.query.name);
             if (this.$route.query.id) {
                 this.name = this.$route.query.name;
                 this.navBread[this.navBread.length - 1].name = "更新分类";

@@ -7,7 +7,8 @@
                     <thead>
                     <tr>
                         <th width="50">序号</th>
-                        <th width="500">名称</th>
+                        <th>商品图片</th>
+                        <th width="400">商品名称</th>
                         <th>时间</th>
                         <th>价格</th>
                         <th>数量</th>
@@ -18,7 +19,8 @@
                     </thead>
                     <tbody>
                     <tr v-for="(item,index) in productList" :id="`tr_${item._id}`">
-                        <td>{{index + 1}}</td>
+                        <td>{{(index+1)+pageNo*pageSize-pageSize}}</td>
+                        <td><img class="cartImg" :src="`/static/products/${item.image}`"/></td>
                         <td>{{item.name}}</td>
                         <td>{{formatTime(item.meta.createAt)}}</td>
                         <td>{{item.price}}</td>
@@ -30,8 +32,14 @@
                             <a href="javascript:void(0)" @click="toDelete(item._id)" class="btn btn-danger">删除</a>
                         </td>
                     </tr>
+                    <tr v-show="isNoData">
+                        <td colspan="9">
+                            <NoData/>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
+                <Pagination v-show="hasPagination" :totalPage="totalPage" :pageSize="pageSize" :pageNo="pageNo" v-on:toPageClick="toPageClick" v-on:prevClick="prevClick" v-on:nextClick="nextClick"></Pagination>
             </div>
             <Modal :modal="modal">
                 <p slot="title">温馨提示</p>
@@ -49,6 +57,8 @@
     import Header from '../../components/Header';
     import Modal from '../../components/Modal';
     import axios from 'axios';
+    import Pagination from '../../components/Pagination';
+    import NoData from '../../components/NoData';
 
     export default {
         name: 'ProductList',
@@ -63,7 +73,7 @@
                     show: false
                 },
                 productId: '',
-                navBread:[
+                navBread: [
                     {
                         path: '/',
                         name: '首页'
@@ -71,7 +81,12 @@
                         path: '/',
                         name: '商品列表'
                     }
-                ]
+                ],
+                isNoData: false, // 有没有数据
+                hasPagination: false, // 有无分页
+                totalPage: 0, // 总记录数
+                pageNo: 1, // 从第一页开始
+                pageSize: 10 // 每页几条数据
             }
         },
         mounted() {
@@ -79,12 +94,16 @@
         },
         methods: {
             getData() {
-                axios.get('/api/products').then(res => {
+                axios.get(`/api/products?pageNo=${this.pageNo}&pageSize=${this.pageSize}&t=${Date.now()}`).then(res => {
                     this.msg = res.data.code;
+                    this.totalPage = res.data.count;
                     if (res.data.list.length > 0) {
-                        this.productList = res.data.list;
+                        this.productList = [...res.data.list];
+                        if (res.data.count > res.data.list.length) {
+                            this.hasPagination = true;
+                        }
                     } else {
-                        this.ok = !this.ok;
+                        this.isNoData = !this.isNoData;
                     }
                 }).catch(err => {
                     console.log(err);
@@ -115,34 +134,52 @@
             },
             cancel() {
                 this.modal.show = false;
+            },
+            prevClick(index) {
+                this.pageNo = index;
+                this.getData();
+            },
+            nextClick(index) {
+                this.pageNo = index;
+                this.getData();
+            },
+            toPageClick(index) {
+                this.pageNo = index;
+                this.getData();
             }
         },
-        components: {Header, Modal}
+        components: {Header, Modal, Pagination, NoData}
     }
 
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-    table tr {
-        th,td {
-            display: table-cell;
-            vertical-align: middle;
-            text-align: center;
-            a:last-child {
-                margin-left: 5px;
+    table {
+        margin-bottom: 0;
+        tr {
+            th, td {
+                display: table-cell;
+                vertical-align: middle;
+                text-align: center;
+                a:last-child {
+                    margin-left: 5px;
+                }
+                &:first-child, &:last-child {
+                    text-align: center;
+                }
+                &:nth-of-type(3) {
+                    text-align: left;
+                }
             }
-            &:first-child, &:last-child {
+            th:last-child {
                 text-align: center;
             }
-            &:nth-of-type(2){
-                text-align: left;
-            }
         }
-        th:last-child {
-            text-align: center;
-        }
-
     }
 
+    .cartImg {
+        width: 80px;
+        height: 80px;
+    }
 </style>

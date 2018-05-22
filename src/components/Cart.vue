@@ -2,11 +2,12 @@
     <div class="cart" @mouseenter="mouseEnter" @mouseleave="mouseLeave">
         <em></em>
         <span>我的购物车</span>
-        <i>{{$store.state.userInfo.isLogin ? $store.state.cartList.length : 0}}</i>
+        <i>{{$store.state.userInfo.isLogin ? cartListLength : 0}}</i>
         <div class="cartBox" :style="{'display':show ? 'block':'none'}">
             <div v-if="hasGoods">
                 <ul>
                     <li v-for="item in goodList" :key="item.id">
+                        <img class="cartImg" :src="`/static/products/${item.image}`"/>
                         <div>{{item.name}}</div>
                         <p>
                             <span>￥{{formatPrice(item.price)}} × {{item.sum}}</span>
@@ -15,7 +16,7 @@
                     </li>
                 </ul>
                 <div class="cartTotal">
-                    <p>共{{$store.state.cartList.length}}件商品，总计￥<span>{{formatPrice(totalPrice)}}</span>元</p>
+                    <p>共{{cartListLength}}件商品，总计￥<span>{{formatPrice(totalPrice)}}</span>元</p>
                     <p>
                         <router-link to="/toCart">去购物车</router-link>
                     </p>
@@ -36,13 +37,17 @@
                 goodList: 0,
                 hasGoods: false,
                 totalPrice: 0,
-                cartMsg: ''
+                cartMsg: '',
+                cartListLength:0,
             }
         },
         mounted() {
             if (localStorage.getItem('cartList')) {
                 let list = JSON.parse(localStorage.getItem('cartList'));
                 this.$store.dispatch('updateActionsCart', list);
+            }
+            if(this.$store.state.cartList && this.$store.state.cartList.length > 0){
+                this.cartListLength = this.$store.state.cartList.length;
             }
         },
         methods: {
@@ -55,6 +60,7 @@
             },
             del(id, sum) {
                 let list = JSON.parse(localStorage.getItem('cartList'));
+                if (list.length === 0) return;
                 for (let i = 0; i < list.length; i++) {
                     if (list[i].id.indexOf(id) > -1) {
                         list.splice(i, sum);
@@ -67,6 +73,7 @@
             _createGoodsList() {
                 if (this.$store.state.userInfo.isLogin) {
                     this.goodList = this._unique();
+                    console.log(this.goodList)
                     this.hasGoods = this.goodList.length > 0 ? true : false;
                     // 计算金额
                     if (this.goodList && this.goodList.length > 0) {
@@ -85,8 +92,9 @@
                 const newList = [];
                 const listMap = {};
                 // 计算数组中重复值，及个数
+                if (list.length === 0) return;
                 for (let i = 0, len = list.length, key; i < len; i++) {
-                    key = list[i].id + '||' + list[i].name + '||' + list[i].price; // key为id和name的组合，值为number
+                    key = list[i].id + '||' + list[i].name + '||' + list[i].price + '||' + list[i].image; // key为id和name的组合，值为number
                     if (listMap[key]) {
                         listMap[key]++;
                     } else {
@@ -98,6 +106,7 @@
                         id: item.split('||')[0],
                         name: item.split('||')[1],
                         price: item.split('||')[2],
+                        image: item.split('||')[3],
                         sum: listMap[item]
                     })
                 }
@@ -171,6 +180,12 @@
             z-index: 1001;
             transition: all .25ms;
         }
+    }
+
+    .cartImg {
+        width: 80px;
+        height: 80px;
+        margin-right: 10px;
     }
 
     .cartBox {

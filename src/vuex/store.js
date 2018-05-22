@@ -11,7 +11,7 @@ const store = new Vuex.Store({
     state: {
         author: 'jone-chen',
         cartList: null, // 购物车列表,
-        userInfo: {isLogin: false}, // 是否登录}
+        userInfo: {isLogin: false}, // 是否登录
     },
     mutations: {
         change(state, time) {
@@ -22,7 +22,7 @@ const store = new Vuex.Store({
         },
         updateUserInfo(state, obj) {
             state.userInfo = Object.assign({}, obj);
-        }
+        },
     },
     actions: {
         updateActionsUser(context, obj) {

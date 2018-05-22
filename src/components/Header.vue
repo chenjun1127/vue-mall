@@ -23,7 +23,7 @@
                             <router-link class="default-link" to="/user/center">{{user.name}}</router-link>
                         </div>
                         <DropDown :dropDown="dropDown" class="admin" style="margin: 0 10px;">
-                            <li slot="dropLi" v-for="item in newMenu">
+                            <li slot="dropLi" v-for="item in menu">
                                 <router-link :to="`${item.path}`">{{item.text}}</router-link>
                             </li>
                         </DropDown>
@@ -33,7 +33,6 @@
                         <a href="javascript:void(0)" @click="toLogin" class="btn btn-default">登录</a>
                         <a href="javascript:void(0)" @click="toRegister" class="btn btn-danger" style="margin-left: 10px;">注册</a>
                     </div>
-
                     <Cart v-show="!showCart"></Cart>
                 </div>
             </div>
@@ -144,42 +143,12 @@
                     this.user.name = res.data.data.name;
                     this.$store.dispatch('updateActionsUser', Object.assign({}, res.data.data, {isLogin: true}));
                     sessionStorage.setItem('id',res.data.data._id);
+                    sessionStorage.setItem('role',res.data.data.role);
                 }
             }).catch(err => {
                 console.log(err);
             });
             this.defaultSearchValue();
-        },
-        computed: {
-            newMenu() {
-                const {role} = this.$store.state.userInfo;
-                if (role < 10) {
-                    return [
-                        {
-                            'text': '所有商品',
-                            'path': '/user/center',
-                        },
-                        {
-                            'text': '商品列表',
-                            'path': '/user/center',
-                        },
-                        {
-                            'text': '商品录入',
-                            'path': '/user/center',
-                        },
-                        {
-                            'text': '新增分类',
-                            'path': '/user/center',
-                        },
-                        {
-                            'text': '返回首页',
-                            'path': '/',
-                        }
-                    ]
-                } else {
-                    return this.menu;
-                }
-            },
         },
         methods: {
             defaultSearchValue() {
@@ -228,6 +197,7 @@
                             this.isLogin = true;
                             this.$store.dispatch('updateActionsUser', Object.assign({}, res.data.data, {isLogin: true}));
                             sessionStorage.setItem('id',res.data.data._id);
+                            sessionStorage.setItem('role',res.data.data.role);
                             this.$router.push({path: '/'});
                         } else {
                             this.error.show = true;
@@ -318,7 +288,6 @@
                 if (val === '' || reg.test(this.searchValue)) {
                     this.defaultSearchValue();
                 }
-
             },
             toSearch() {
                 const val = this.searchValue;

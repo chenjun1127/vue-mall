@@ -7,7 +7,7 @@
  * @desc:返回时间
  */
 
-class Time {
+export default class Time {
     toTimeString() {
         const hour = new Date().getHours();
         if (hour >= 0 && hour < 5) {
@@ -30,5 +30,3 @@ class Time {
     };
 }
 
-const time = new Time();
-export {time};

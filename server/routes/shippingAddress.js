@@ -5,7 +5,7 @@ const User = require('../models/user');
 
 router.get('/', (req, res) => {
     const userId = req.query.id;
-    ShippingAddress.find({ofUser: userId}).populate({path: 'shippingAddress'}).exec((err, shippingAddress) => {
+    ShippingAddress.find({ofUser: userId}).populate({path: 'shippingAddress'}).sort({'set':-1}).exec((err, shippingAddress) => {
         if (err) {
             res.json({code: 403, desc: err.message});
         } else {
@@ -66,7 +66,11 @@ router.get('/getDetail', (req, res) => {
         res.json({code: 200, desc: 'success', data: shippingAddress});
     })
 });
-
+/**
+ * @dateTime:2018/05/11 15:04:54
+ * @author:ChenJun
+ * @desc:1==>删除、2==>设为默认
+ */
 router.post('/operate', (req, res) => {
     const addressId = req.body.id;
     const operateId = req.body.operateId;

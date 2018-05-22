@@ -3,9 +3,9 @@
         <Header :navBread="navBread"></Header>
         <div class="container">
             <Product :list="productList"/>
-            <Pagination :totalPage="totalPage" :pageSize="pageSize" :pageNo="pageNo" v-on:toPageClick="toPageClick" v-on:prevClick="prevClick"
+            <Pagination v-show="hasPagination" :totalPage="totalPage" :pageSize="pageSize" :pageNo="pageNo" v-on:toPageClick="toPageClick" v-on:prevClick="prevClick"
                         v-on:nextClick="nextClick"></Pagination>
-            <div class="product-tips" v-show="ok">暂无商品</div>
+            <NoData v-show="isNoData"/>
         </div>
     </div>
 </template>
@@ -15,12 +15,13 @@
     import Header from '../components/Header';
     import Product from '../components/Product';
     import Pagination from '../components/Pagination';
+    import NoData from '../components/NoData';
 
     export default {
         name: 'index',
         data() {
             return {
-                ok: false,
+                isNoData: false,
                 productList: [],
                 navBread: [
                     {
@@ -28,6 +29,7 @@
                         name: '首页'
                     }
                 ],
+                hasPagination:false,
                 totalPage: 0, // 总记录数
                 pageNo: 1, // 从第一页开始
                 pageSize: 8 // 每页几条数据
@@ -43,8 +45,11 @@
                         this.totalPage = res.data.count;
                         if (res.data.list.length > 0) {
                             this.productList = [...res.data.list];
+                            if (res.data.count > res.data.list.length) {
+                                this.hasPagination = true;
+                            }
                         } else {
-                            this.ok = !this.ok;
+                            this.isNoData = !this.isNoData;
                         }
                     } else {
                         console.log("error:" + res.data.desc);
@@ -66,7 +71,7 @@
                 this.getData();
             }
         },
-        components: {Header, Product, Pagination}
+        components: {Header, Product, Pagination,NoData}
     }
 </script>
 

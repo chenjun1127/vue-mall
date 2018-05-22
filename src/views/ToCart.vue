@@ -10,6 +10,7 @@
                         <th>
                             <div id="select-all"><span @click="selectAll" :class="['select', selectedAll?'selected':'']"></span></div>
                         </th>
+                        <th>商品图片</th>
                         <th>商品名称</th>
                         <th>数量</th>
                         <th>价格</th>
@@ -20,6 +21,7 @@
                     <tbody>
                     <tr v-for="(item) in goodList">
                         <td><span @click="select(item)" v-model="item.checked" :class="['select', item.checked?'selected':'']"></span></td>
+                        <td><img class="cartImg" :src="`/static/products/${item.image}`"/></td>
                         <td>{{item.name}}</td>
                         <td width="160">
                             <div class="input-group">
@@ -37,7 +39,7 @@
                 <div class="price-sum">
                     <p class="goods-sum">已选择 <span>{{goodsSum}}</span> 件商品</p>
                     <p class="goods-price">总价：<span>￥{{formatPrice(goodsPriceTotal)}}</span></p>
-                    <router-link class="ben btn-danger btn-lg" to="/order">去结算</router-link>
+                    <button class="btn btn-danger btn-lg" @click="toBalance" :disabled="disabled">去结算</button>
                 </div>
             </div>
         </div>
@@ -84,6 +86,7 @@
                     show: false
                 },
                 delItem: '',
+                disabled: true,
             }
         },
         mounted() {
@@ -97,7 +100,7 @@
                 const listMap = {};
                 // 计算数组中重复值，及个数
                 for (let i = 0, len = list.length, key; i < len; i++) {
-                    key = list[i].id + '||' + list[i].name + '||' + list[i].price;  // key为id和name的组合，值为number
+                    key = list[i].id + '||' + list[i].name + '||' + list[i].price + '||' + list[i].image;  // key为id和name的组合，值为number
                     if (listMap[key]) {
                         listMap[key]++;
                     } else {
@@ -110,6 +113,7 @@
                         id: item.split('||')[0],
                         name: item.split('||')[1],
                         price: item.split('||')[2],
+                        image: item.split('||')[3],
                         sum: listMap[item]
                     })
                 }
@@ -161,6 +165,7 @@
                         id: item.id,
                         name: item.name,
                         price: parseFloat(item.price),
+                        image: item.image,
                         checked: item.checked
                     };
                     for (let i in list) {
@@ -183,6 +188,7 @@
                         id: item.id,
                         name: item.name,
                         price: parseFloat(item.price),
+                        image: item.image,
                         checked: item.checked
                     };
                     let newList = [...list, ...[newObj]];
@@ -204,6 +210,7 @@
                             id: item.id,
                             name: item.name,
                             price: parseFloat(item.price),
+                            image: item.image,
                             checked: item.checked
                         })
                     }
@@ -278,7 +285,7 @@
             },
             selectAll() {
                 // 全选
-                this.selectedAll = !this.selectedAll
+                this.selectedAll = !this.selectedAll;
                 let cartList = this.$store.state.cartList;
                 for (let i in cartList) {
                     cartList[i].checked = this.selectedAll ? true : false;
@@ -313,6 +320,23 @@
                     this.goodsSum = selectedCart[0].sum;
                     this.goodsPriceTotal = selectedCart[0].sum * selectedCart[0].price;
                 }
+                // 更新disabled;
+                const arr = [];
+                cartList.map(item => {
+                    arr.push(item.checked);
+                });
+                this.disabled = arr.indexOf(true) > -1 ? false : true;
+            },
+            // 结算
+            toBalance() {
+                let orderList = [];
+                this.goodList.map(item => {
+                    if (item.checked) {
+                        orderList.push(item);
+                    }
+                });
+                sessionStorage.setItem('orderList', JSON.stringify(orderList));
+                this.$router.push('/order');
             }
         },
         components: {Header, Modal},
@@ -331,24 +355,22 @@
 
     }
 
-    table tr td {
+    table tr td, table tr th {
         display: table-cell;
         vertical-align: middle;
-    }
-
-    table tr th, table tr td {
-        &:first-child {
-            display: table-cell;
-            vertical-align: middle;
-            text-align: center;
-        }
-        &:last-child {
-            text-align: center;
+        text-align: center;
+        &:nth-of-type(3) {
+            text-align: left;
         }
     }
 
     .input-group-addon {
         cursor: pointer;
+    }
+
+    .cartImg {
+        width: 80px;
+        height: 80px;
     }
 
     .select {

@@ -77,7 +77,7 @@
 <script>
     import Header from '../../components/Header';
     import axios from 'axios';
-    import {time} from '../../utils/time';
+    import Time from '../../utils/Time';
     import Modal from '../../components/Modal';
 
     export default {
@@ -111,7 +111,7 @@
         },
         mounted() {
             this.getData();
-            this.time = time.toTimeString();
+            this.time = new Time().toTimeString();
         },
         created() {
             if (this.timer) {
@@ -172,8 +172,8 @@
             showTime() {
                 this.timer = setInterval(() => {
                     const timeStr = new Date();
-                    const m = time.formatDigit(timeStr.getMonth() + 1);
-                    const t = timeStr.getFullYear() + "-" + m + "-" + time.formatDigit(timeStr.getDate()) + " " + time.formatDigit(timeStr.getHours()) + ":" + time.formatDigit(timeStr.getMinutes()) + ":" + time.formatDigit(timeStr.getSeconds());
+                    const m = new Time().formatDigit(timeStr.getMonth() + 1);
+                    const t = timeStr.getFullYear() + "-" + m + "-" + new Time().formatDigit(timeStr.getDate()) + " " + new Time().formatDigit(timeStr.getHours()) + ":" + new Time().formatDigit(timeStr.getMinutes()) + ":" + new Time().formatDigit(timeStr.getSeconds());
                     this.$refs.time.innerHTML = "当前时间:" + t;
                 }, 1000);
             }

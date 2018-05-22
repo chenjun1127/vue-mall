@@ -9,13 +9,15 @@ import CategoryList from '@/views/admin/CategoryList';
 import Success from '@/components/Success';
 import Fail from '@/components/Fail';
 import ProductDetail from '@/views/ProductDetail';
-import Login from '@/views/Login';
+import SignIn from '@/views/SignIn';
+import SignUp from '@/views/SignUp';
 import UserCenter from '@/views/user/Center';
 import UserPassword from '@/views/user/Password';
 import GetBack from '@/views/user/GetBack';
 import ToCart from '@/views/ToCart';
 import Search from '@/views/Search';
 import Order from '@/views/Order';
+import OrderSuccess from '@/views/OrderSuccess';
 
 Vue.use(Router);
 
@@ -29,12 +31,18 @@ export default new Router({
         {
             path: '/product/list',
             name: 'ProductList',
-            component: ProductList
+            component: ProductList,
+            meta:{
+                requireAuth: true,
+            }
         },
         {
             path: '/product/save',
             name: 'ProductSave',
-            component: ProductSave
+            component: ProductSave,
+            meta:{
+                requireAuth: true,
+            }
         },
         {
             path: '/product/detail',
@@ -44,17 +52,26 @@ export default new Router({
         {
             path: '/category/add',
             name: 'CategoryAdd',
-            component: CategoryAdd
+            component: CategoryAdd,
+            meta:{
+                requireAuth: true,
+            }
         },
         {
             path: '/category/list',
             name: 'CategoryList',
-            component: CategoryList
+            component: CategoryList,
+            meta:{
+                requireAuth: true,
+            }
         },
         {
             path: '/category/products',
             name: 'Products',
-            component: Products
+            component: Products,
+            meta:{
+                requireAuth: true,
+            }
         },
         {
             path: '/success',
@@ -62,9 +79,14 @@ export default new Router({
             component: Success
         },
         {
-            path: '/login',
-            name: 'Login',
-            component: Login
+            path: '/signIn',
+            name: 'SignIn',
+            component: SignIn
+        },
+        {
+            path: '/signUp',
+            name: 'SignUp',
+            component: SignUp
         },
         {
             path: '/user/center',
@@ -89,7 +111,10 @@ export default new Router({
         {
             path: '/toCart',
             name:'toCart',
-            component: ToCart
+            component: ToCart,
+            meta:{
+                requireAuth: true,
+            }
         },
         {
             path: '/search',
@@ -100,7 +125,11 @@ export default new Router({
             path: '/order',
             name:'Order',
             component: Order
+        },
+        {
+            path: '/orderSuccess',
+            name:'OrderSuccess',
+            component: OrderSuccess
         }
-
     ]
 })

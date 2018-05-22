@@ -37,6 +37,5 @@ const sortByUp = (arr, propertyName) => {
         }
     })
 };
-
 export {removeByValue, formatPrice, sortByUp};
 
