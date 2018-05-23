@@ -114,7 +114,7 @@
         text-align: right;
     }
 
-    a.link {
+    a.col-md-9.verifyHeight {
         color: #e4393c;
 
     }

@@ -53,16 +53,18 @@
             <div slot="content" :id="id">
                 <div class="form-group">
                     <label for="userName">用户名</label>
-                    <input type="text" class="form-control" id="userName" @blur="validate($event)" @focus="disappear($event)" placeholder="请输入用户名" v-model="user.name">
+                    <input type="text" class="form-control" id="userName" v-model="user.name" v-verify.name="user.name" placeholder="请输入用户名">
+                    <p class="verify-error-msg" v-remind="user.name"></p>
                 </div>
                 <div class="form-group">
                     <label for="userPassword">密码</label>
-                    <input type="password" class="form-control" id="userPassword" @blur="validate($event)" @focus="disappear($event)" placeholder="请输入密码"
-                           v-model="user.password">
+                    <input type="password" class="form-control" id="userPassword" v-model="user.password" v-verify.password="user.password" placeholder="请输入密码">
+                    <p class="verify-error-msg" v-remind="user.password"></p>
                 </div>
                 <div class="form-group" ref="userEmail" style="display:none;">
                     <label for="userEmail">邮箱</label>
-                    <input type="email" class="form-control" id="userEmail" @blur="validate($event)" @focus="disappear($event)" placeholder="请输入邮箱" v-model="user.email">
+                    <input type="email" class="form-control" id="userEmail" v-model="user.email" v-verify="user.email" placeholder="请输入邮箱">
+                    <p class="verify-error-msg" v-remind="user.email"></p>
                 </div>
                 <div class="error" v-show="error.show">{{error.msg}}</div>
             </div>
@@ -70,7 +72,7 @@
                 <a href="javascript:void(0)" @click="toPassword" class="default-link" ref="forget">忘记密码？</a>
                 <div class="btn">
                     <button class="btn btn-default" @click="cancel">取消</button>
-                    <button class="btn btn-danger" @click="enter" :disabled="disabled">确定</button>
+                    <button class="btn btn-danger" @click="enter">确定</button>
                 </div>
             </div>
         </Modal>
@@ -82,7 +84,6 @@
     import Modal from './Modal';
     import Cart from './Cart';
     import axios from 'axios';
-    import * as utils from '../utils/index';
 
     export default {
         name: 'Header',
@@ -131,19 +132,24 @@
                     show: false,
                     msg: ''
                 },
-                disabled: true,
                 searchValue: '',
             }
         },
-
+        verify: {
+            user: {
+                name: ['required', 'username'],
+                password: ['required', 'password'],
+                email: ['required', 'email'],
+            }
+        },
         mounted() {
             axios.get('/api/users/session?t=' + Date.now()).then(res => {
                 if (res.data.code === 200) {
                     this.isLogin = true;
                     this.user.name = res.data.data.name;
                     this.$store.dispatch('updateActionsUser', Object.assign({}, res.data.data, {isLogin: true}));
-                    sessionStorage.setItem('id',res.data.data._id);
-                    sessionStorage.setItem('role',res.data.data.role);
+                    sessionStorage.setItem('id', res.data.data._id);
+                    sessionStorage.setItem('role', res.data.data.role);
                 }
             }).catch(err => {
                 console.log(err);
@@ -163,7 +169,6 @@
                 this.$refs.userEmail.style.display = "none";
                 this.user.name = '';
                 this.user.password = '';
-                this.disabled = true;
                 this.error.show = false;
             },
             toRegister() {
@@ -175,37 +180,42 @@
                 this.user.name = '';
                 this.user.password = '';
                 this.user.email = '';
-                this.disabled = true;
                 this.error.show = false;
             },
             enter() {
                 if (this.$refs.userEmail.style.display === "block") {
-                    axios.post('/api/users/register', this.user).then(res => {
-                        if (res.data.code === 200) {
-                            this.$router.push({name: 'Success', params: {msg: res.data.desc}});
-                        } else {
-                            this.error.show = true;
-                            this.error.msg = res.data.desc;
-                        }
-                    }).catch(err => {
-                        console.log(err);
-                    })
+                    // 注册
+                    if (this.$verify.check()) {
+                        axios.post('/api/users/register', this.user).then(res => {
+                            if (res.data.code === 200) {
+                                this.$router.push({name: 'Success', params: {msg: res.data.desc}});
+                            } else {
+                                this.error.show = true;
+                                this.error.msg = res.data.desc;
+                            }
+                        }).catch(err => {
+                            console.log(err);
+                        })
+                    }
                 } else {
-                    axios.post('/api/users/login', this.user).then(res => {
-                        if (res.data.code === 200) {
-                            this.modal.show = false;
-                            this.isLogin = true;
-                            this.$store.dispatch('updateActionsUser', Object.assign({}, res.data.data, {isLogin: true}));
-                            sessionStorage.setItem('id',res.data.data._id);
-                            sessionStorage.setItem('role',res.data.data.role);
-                            this.$router.push({path: '/'});
-                        } else {
-                            this.error.show = true;
-                            this.error.msg = res.data.desc;
-                        }
-                    }).catch(err => {
-                        console.log(err);
-                    })
+                    // 登录
+                    if (this.$verify.check('name') && this.$verify.check('password')) {
+                        axios.post('/api/users/login', this.user).then(res => {
+                            if (res.data.code === 200) {
+                                this.modal.show = false;
+                                this.isLogin = true;
+                                this.$store.dispatch('updateActionsUser', Object.assign({}, res.data.data, {isLogin: true}));
+                                sessionStorage.setItem('id', res.data.data._id);
+                                sessionStorage.setItem('role', res.data.data.role);
+                                this.$router.push({path: '/'});
+                            } else {
+                                this.error.show = true;
+                                this.error.msg = res.data.desc;
+                            }
+                        }).catch(err => {
+                            console.log(err);
+                        })
+                    }
                 }
             },
             toLogout() {
@@ -226,61 +236,6 @@
             },
             cancel() {
                 this.modal.show = false;
-            },
-            disappear(e) {
-                this.error.show = false;
-                e.target.classList.remove('focus');
-            },
-            validate(e) {
-                if (e.target.parentNode.parentNode.id === "login") {
-                    delete this.user.email;
-                }
-                let value = e.target.value;
-                if (value === "") {
-                    this.error.show = true;
-                    this.error.msg = '不能为空，请重新输入！';
-                    this.disabled = true;
-                    e.target.classList.add('focus');
-                } else {
-                    if (e.target.id === "userName") {
-                        if (!/^[a-zA-Z0-9_]{4,16}$/.test(value)) {
-                            this.error.show = true;
-                            this.error.msg = '用户名为4到16位（字母，数字，下划线）';
-                            this.disabled = true;
-                            e.target.classList.add('focus');
-                        } else {
-                            this.mapValidate(value);
-                        }
-                    } else if (e.target.id === "userPassword") {
-                        if (!/^[A-Za-z0-9]{6,16}$/.test(value)) {
-                            this.error.show = true;
-                            this.error.msg = '密码为字母开头，长度在6~16之间，只能包含字符、数字和下划线';
-                            this.disabled = true;
-                            e.target.classList.add('focus');
-                        } else {
-                            this.mapValidate(value);
-                        }
-                    } else if (e.target.id === "userEmail") {
-                        if (!/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/.test(value)) {
-                            this.error.show = true;
-                            this.error.msg = '邮箱格式不正确，请重新输入';
-                            this.disabled = true;
-                            e.target.classList.add('focus');
-                        } else {
-                            this.mapValidate(value);
-                        }
-                    }
-                }
-            },
-            mapValidate(val) {
-                let userInfo = Object.values(this.user);
-                // let index = userInfo.indexOf(val);
-                // userInfo.splice(index, 1);
-                // 删除数组当中指定的元素
-                let newArray = utils.removeByValue(userInfo, val);
-                for (let i in newArray) {
-                    newArray[i] === "" ? this.disabled = true : this.disabled = false;
-                }
             },
             checkValue() {
                 const val = this.searchValue;

@@ -17,6 +17,11 @@
         -moz-osx-font-smoothing: rayscale;
     }
 
+    .cartImg {
+        width: 80px;
+        height: 80px;
+    }
+
     a {
         color: #333;
     }
@@ -66,5 +71,13 @@
         -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
         background-color: #888;
     }
+    a.link {
+        color: #e4393c;
 
+    }
+
+    a.link:hover {
+        color: #b32b2e;
+        text-decoration: none;
+    }
 </style>

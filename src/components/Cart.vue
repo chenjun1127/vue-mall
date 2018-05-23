@@ -2,7 +2,7 @@
     <div class="cart" @mouseenter="mouseEnter" @mouseleave="mouseLeave">
         <em></em>
         <span>我的购物车</span>
-        <i>{{$store.state.userInfo.isLogin ? cartListLength : 0}}</i>
+        <i>{{$store.state.userInfo.isLogin && $store.state.cartList.length > 0 ? $store.state.cartList.length : 0}}</i>
         <div class="cartBox" :style="{'display':show ? 'block':'none'}">
             <div v-if="hasGoods">
                 <ul>
@@ -16,7 +16,7 @@
                     </li>
                 </ul>
                 <div class="cartTotal">
-                    <p>共{{cartListLength}}件商品，总计￥<span>{{formatPrice(totalPrice)}}</span>元</p>
+                    <p>共{{$store.state.cartList.length}}件商品，总计￥<span>{{formatPrice(totalPrice)}}</span>元</p>
                     <p>
                         <router-link to="/toCart">去购物车</router-link>
                     </p>
@@ -28,7 +28,6 @@
 </template>
 
 <script>
-
     export default {
         name: "cart",
         data() {
@@ -38,16 +37,12 @@
                 hasGoods: false,
                 totalPrice: 0,
                 cartMsg: '',
-                cartListLength:0,
             }
         },
         mounted() {
             if (localStorage.getItem('cartList')) {
                 let list = JSON.parse(localStorage.getItem('cartList'));
                 this.$store.dispatch('updateActionsCart', list);
-            }
-            if(this.$store.state.cartList && this.$store.state.cartList.length > 0){
-                this.cartListLength = this.$store.state.cartList.length;
             }
         },
         methods: {
@@ -74,7 +69,11 @@
                 if (this.$store.state.userInfo.isLogin) {
                     this.goodList = this._unique();
                     console.log(this.goodList)
-                    this.hasGoods = this.goodList.length > 0 ? true : false;
+                    if(this.goodList){
+                        this.hasGoods = this.goodList.length > 0 ? true : false;
+                    }else{
+                        this.hasGoods = false;
+                    }
                     // 计算金额
                     if (this.goodList && this.goodList.length > 0) {
                         const priceArr = this.goodList.map(ele => parseFloat(ele.price) * ele.sum);

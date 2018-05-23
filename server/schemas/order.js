@@ -14,19 +14,20 @@ var orderSchema = new mongoose.Schema({
         default: Date.now()
     },
     ofUser: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-    goodsList: [
-        {
-            productId: {
-                type: mongoose.Schema.Types.ObjectId, ref: 'Products'
-            },
-            sum: Number,
-        }
-    ],
-    status:{
-        type:Number,default:1,
+    goodsList: [{product: {type: mongoose.Schema.Types.ObjectId, ref: 'Product'}, sum: Number, _id: false}],
+    status: {
+        type: Number, default: 1,
     },
-    totalMoney:Number,
+    totalMoney: Number,
+    cost: {
+        freight: {type: Number, default: 0},
+        rebate: {type: Number, default: 0},
+        serviceCharge: {type: Number, default: 0},
+    }
 });
-
+orderSchema.pre('save', function (next) {
+    this.createTime = Date.now();
+    next()
+})
 module.exports = orderSchema;
 

@@ -307,7 +307,6 @@
                 this.modal.show = true;
                 this.receive.addressId = id;
                 axios.get(`/api/shippingAddress/getDetail?id=${id}`).then(res => {
-                    console.log(res);
                     if (res.data.code === 200) {
                         this.receive.name = res.data.data.name;
                         this.receive.preAddress = res.data.data.preAddress;
@@ -356,15 +355,18 @@
                 if (!userId) return;
                 let listArr = [];
                 this.orderList.map(item => {
-                    listArr.push({idArr: item.id, sum: item.sum});
+                    listArr.push({product: item.id, sum: item.sum});
                 });
+                console.log(listArr)
                 let bodyData = Object.assign({}, {
                     ofUser: userId,
                     deliverMethod: this.selectDeliverMethod,
                     payMethod: this.selectPayMethod,
                     goodsList: listArr,
                     totalMoney: this.getTotal.totalMoney + this.cost.freight + this.cost.serviceCharge - this.cost.rebate,
+                    cost:this.cost,
                 }, this.getSelectedAddress);
+                console.log(bodyData)
                 axios.post('/api/order', bodyData).then(res => {
                     console.log(res);
                     if (res.data.code === 200) {

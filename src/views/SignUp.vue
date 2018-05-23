@@ -42,7 +42,7 @@
                             div 点击注册，表示您同意本商城 《服务协议及隐私声明》
                     .form-group
                         .col-md-9.col-md-offset-3
-                            button.btn.btn-danger(type="button",@click="toLogin") 同意协议并注册
+                            button.btn.btn-danger(type="button",@click="toSignUp") 同意协议并注册
 </template>
 
 <script>
@@ -90,18 +90,16 @@
             this.getVerifyCode.GVerify();
         },
         methods: {
-            toLogin() {
+            toSignUp() {
                 if (this.$verify.check()) {
                     const userInfoObj = this.userInfo;
                     delete userInfoObj.rePassword;
                     delete userInfoObj.verifyCode;
                     axios.post('/api/users/register', userInfoObj).then(res => {
                         if (res.data.code === 200) {
-                            this.$store.dispatch('updateActionsUser', Object.assign({}, res.data.data, {isLogin: true}));
-                            this.$router.push({path: '/'});
+                            this.$router.push({name: 'Success', params: {msg: res.data.desc, url: '/'}});
                         } else {
-                            alert(res.data.desc);
-                            this.$router.push({path: '/signUp'});
+                            this.$router.push({name: 'Fail', params: {msg: res.data.desc}});
                         }
                     }).catch(err => {
                         console.log(err);
@@ -153,13 +151,5 @@
         text-align: right;
     }
 
-    a.link {
-        color: #e4393c;
 
-    }
-
-    a.link:hover {
-        color: #b32b2e;
-        text-decoration: none;
-    }
 </style>

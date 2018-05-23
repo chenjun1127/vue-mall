@@ -9,6 +9,7 @@
                             <input type="file" id="uploadPic" name="file" accept="image/png,image/gif,image/jpeg" @change="getFile($event)">
                         </span>
                     </div>
+                    <div class="roleDesc" :class="roleClass">{{roleDesc}}</div>
                     <div class="userName">{{time}}好，{{user.name}}
                         <div class="time"><span ref="time"></span></div>
                     </div>
@@ -88,7 +89,12 @@
                     {
                         path: '/',
                         name: '首页'
-                    }, {
+                    },
+                    {
+                        path: '/user/myOrder',
+                        name: '我的订单'
+                    },
+                    {
                         path: '/user/center',
                         name: '个人中心'
                     }
@@ -107,6 +113,8 @@
                 styleBgObj: 'backgroundImage: url(/static/images/default-head.png)',
                 time: '',
                 timer: null,
+                roleClass: null,
+                roleDesc: '',
             }
         },
         mounted() {
@@ -131,6 +139,13 @@
                             this.user = Object.assign({}, this.user, result);
                             if (this.user.img) {
                                 this.styleBgObj = `backgroundImage: url(/static/uploads/${this.user.img})`;
+                            }
+                            if (this.user.role > 10) {
+                                this.roleClass = 'admin';
+                                this.roleDesc = '超级管理员';
+                            } else {
+                                this.roleClass = 'ordinary';
+                                this.roleDesc = '普通用户';
                             }
                         }
                     }).catch(err => {
@@ -239,5 +254,19 @@
     .radio-line-1 {
         margin-bottom: 0;
         padding-top: 5px;
+    }
+
+    .roleDesc {
+        text-align: center;
+        font-weight: bold;
+        padding: 3px 0;
+    }
+
+    .admin {
+        color: #d01a39
+    }
+
+    .ordinary {
+        color: #00B7FF;
     }
 </style>

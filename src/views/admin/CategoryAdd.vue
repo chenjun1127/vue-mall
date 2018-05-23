@@ -79,11 +79,3 @@
     }
 </script>
 
-<style scoped>
-    .focus {
-        border-color: #d01a39;
-        outline: 0;
-        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(208, 26, 57, .6);
-        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(208, 26, 57, .6);
-    }
-</style>

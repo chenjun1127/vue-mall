@@ -34,6 +34,9 @@
                         <td>￥{{formatPrice(item.price*item.sum)}}</td>
                         <td><a href="javascript:void(0)" @click="del(item)">删除</a></td>
                     </tr>
+                    <tr v-show="noData">
+                        <td colspan="7">暂无商品</td>
+                    </tr>
                     </tbody>
                 </table>
                 <div class="price-sum">
@@ -87,6 +90,7 @@
                 },
                 delItem: '',
                 disabled: true,
+                noData: false,
             }
         },
         mounted() {
@@ -96,6 +100,7 @@
         methods: {
             _unique() {
                 const list = this.$store.state.cartList;
+                if (list.length === 0) return;
                 const newList = [];
                 const listMap = {};
                 // 计算数组中重复值，及个数
@@ -107,6 +112,7 @@
                         listMap[key] = 1;
                     }
                 }
+                console.log(listMap)
                 // 根据个数，重新整理数组;
                 for (let item in listMap) {
                     newList.push({
@@ -298,13 +304,16 @@
             // 计算总价
             computedGoods(cartList) {
                 let selectedCart = [];
-                if (cartList && cartList.length > 0) {
-                    cartList.map((item) => {
-                        if (item.checked) {
-                            selectedCart.push(item);
-                        }
-                    })
+                if (!cartList) {
+                    this.noData = true;
+                    this.selectedAll = false;
+                    return;
                 }
+                cartList.map((item) => {
+                    if (item.checked) {
+                        selectedCart.push(item);
+                    }
+                });
                 if (selectedCart.length === 0) {
                     this.goodsSum = 0;
                     this.goodsPriceTotal = 0;
@@ -330,11 +339,13 @@
             // 结算
             toBalance() {
                 let orderList = [];
-                this.goodList.map(item => {
-                    if (item.checked) {
-                        orderList.push(item);
-                    }
-                });
+                if (this.goodList && this.goodList.length > 0) {
+                    this.goodList.map(item => {
+                        if (item.checked) {
+                            orderList.push(item);
+                        }
+                    });
+                }
                 sessionStorage.setItem('orderList', JSON.stringify(orderList));
                 this.$router.push('/order');
             }

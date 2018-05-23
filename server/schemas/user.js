@@ -13,7 +13,7 @@ var UserSchema = new mongoose.Schema({
     address: String,
     firstSave: {type: Boolean, default: false},
     sign: String,
-    shippingAddress:[{ type: ObjectId, ref: 'ShippingAddress' }],
+    shippingAddress: [{type: ObjectId, ref: 'ShippingAddress'}],
     meta: {
         createAt: {
             type: Date,

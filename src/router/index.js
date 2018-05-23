@@ -8,7 +8,6 @@ import CategoryAdd from '@/views/admin/CategoryAdd';
 import CategoryList from '@/views/admin/CategoryList';
 import Success from '@/components/Success';
 import Fail from '@/components/Fail';
-import ProductDetail from '@/views/ProductDetail';
 import SignIn from '@/views/SignIn';
 import SignUp from '@/views/SignUp';
 import UserCenter from '@/views/user/Center';
@@ -18,7 +17,7 @@ import ToCart from '@/views/ToCart';
 import Search from '@/views/Search';
 import Order from '@/views/Order';
 import OrderSuccess from '@/views/OrderSuccess';
-
+import MyOrder from '@/views/user/MyOrder';
 Vue.use(Router);
 
 export default new Router({
@@ -43,11 +42,6 @@ export default new Router({
             meta:{
                 requireAuth: true,
             }
-        },
-        {
-            path: '/product/detail',
-            name: 'ProductDetail',
-            component: ProductDetail
         },
         {
             path: '/category/add',
@@ -99,6 +93,11 @@ export default new Router({
             component: UserPassword,
         },
         {
+            path: '/user/myOrder',
+            name: 'MyOrder',
+            component: MyOrder,
+        },
+        {
             path: '/user/password/getBack',
             name:'GetBack',
             component: GetBack
@@ -112,9 +111,6 @@ export default new Router({
             path: '/toCart',
             name:'toCart',
             component: ToCart,
-            meta:{
-                requireAuth: true,
-            }
         },
         {
             path: '/search',
