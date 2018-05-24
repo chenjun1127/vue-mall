@@ -1,5 +1,7 @@
 /**
- * Created by ChenJun on 2018/5/11
+ * @dateTime:2018/05/24 11:03:12
+ * @author:ChenJun
+ * @desc:生成订单号
  */
 const moment = require('moment');
 const orderNo = () => {
@@ -8,6 +10,6 @@ const orderNo = () => {
     const r1 = Math.floor(Math.random() * 10);
     const r2 = Math.floor(Math.random() * 10);
     return NO_START + r1 + date + r2;
-}
+};
 
 module.exports = orderNo;
