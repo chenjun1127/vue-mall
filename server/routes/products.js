@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const Products = require('../models/product');
-const {requiredLogin, requiredAdmin} = require('../middleware/auth');
 const Categories = require('../models/category');
 // 查询接口,分页查询
 router.get('/', (req, res, next) => {

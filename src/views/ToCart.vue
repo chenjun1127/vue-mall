@@ -10,8 +10,8 @@
                         <th>
                             <div id="select-all"><span @click="selectAll" :class="['select', selectedAll?'selected':'']"></span></div>
                         </th>
-                        <th>商品图片</th>
-                        <th>商品名称</th>
+                        <th width="100">商品图片</th>
+                        <th width="480">商品名称</th>
                         <th>数量</th>
                         <th>价格</th>
                         <th>小计</th>
@@ -307,6 +307,9 @@
                 if (!cartList) {
                     this.noData = true;
                     this.selectedAll = false;
+                    this.goodsSum = 0;
+                    this.goodsPriceTotal = 0;
+                    this.disabled = true;
                     return;
                 }
                 cartList.map((item) => {

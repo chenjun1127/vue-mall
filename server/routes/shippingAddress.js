@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
             res.json({code: 200, desc: 'success', list: shippingAddress});
         }
     })
-})
+});
 
 /**
  * @dateTime:2018/05/09 14:07:52

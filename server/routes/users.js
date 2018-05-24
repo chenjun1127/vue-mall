@@ -3,10 +3,9 @@ const router = express.Router();
 const User = require('../models/user');
 const sendMail = require('../utils/sendMail');
 const createCode = require('../utils/tools');
-const {requiredLogin, requiredAdmin} = require('../middleware/auth');
 
 // 获取session状态
-router.get('/session', requiredLogin, (req, res) => {
+router.get('/session', (req, res) => {
     if (req.session.user) {
         res.json({code: 200, data: req.session.user});
     } else {
