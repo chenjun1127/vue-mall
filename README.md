@@ -1,19 +1,67 @@
 # Vue Mall
 
-> Vue全家桶项目，该项目是基于Vue全家桶开发的商城，采用的技术栈为 Webpack + Vue + Vuex + Vue-router + Sass + Es6 + Localstorage + Css3 + Node(express) + MongoDB；整个项目前后端分离开发，前端基于Vue全家桶进行渲染，后端由NodeJs+MongonDB提供服务。整个项目前后端由本人独自开发，涉及的知识点非常广泛，基本实现了一个商城应有的功能！
+> A Vue.js project
 
-``` bash
-# install dependencies
-npm install
+### 一、简介
+Vue全家桶项目，该项目是基于Vue全家桶开发的商城网站，采用的技术栈为 Webpack + Vue + Vuex + Vue-router + Sass + Es6 + LocalStorage + Css3 + Node(express) + MongoDB；整个项目前后端分离开发，前端基于Vue全家桶进行渲染，后端由NodeJs+MongonDB提供服务。整个项目前后端由本人独自开发，基本实现了一个商城应有的功能！
 
-# serve with hot reload at localhost:8080
-npm run dev
+#### 1、项目依赖基本核心版本：
+* "body-parser": "~1.17.1",
+* "cookie-parser": "~1.4.3",
+* "debug": "~2.6.3",
+* "express": "~4.15.2",
+* "jade": "~1.11.0",
+* "moment": "^2.20.1",
+* "morgan": "~1.8.1",
+* "serve-favicon": "~2.4.2",
+* "vue": "^2.5.2",
+* "vue-router": "^3.0.1",
+* "vuex": "^3.0.1"
 
-# build for production with minification
-npm run build
+#### 2、项目前端搭建:
+* 基于Vue全家桶进行前端页面渲染
+* 基本样式基于Bootstrap
+* 引入了Moment.js格式化前端页面显示时间
 
-# build for production and view the bundle analyzer report
-npm run build --report
+#### 3、项目后端搭建:
+* 使用NodeJs的express框架完成项目后端搭建；
+* 使用mongodb完成数据存储，通过mongoose模块完成对mongodb数据的构建；
+
+
+#### 4.该商城基本功能：
+项目正常访问无需管理员权限，对个人中心资料的修改，需要用户登录，对商城产品及分类的基本操作（增删改查），需要有管理员权限，默认一个管理员，具体功能如下：
+* 基本的用户登录、注册、个人资料修改
+* 用户权限管理、登录做session处理（失效期暂为5天）
+* 商城产品及产品分类的增加、删除、更新，查询（可分页查询）
+* 加入购物车及结算、下单功能
+* 收货地址的增加、编辑、删除
+* 关键字搜索功能
+* 我的订单功能
+* ...
+
+### 二、网站整体效果，截图看这里
+
+### 三、运行环境
+整个项目的运行，首先要确保 [Node](https://nodejs.org/zh-cn/) + [Mongodb](https://www.mongodb.org/downloads#production) 安装并配置好。
+
+### 三、项目安装及运行
+
+* 克隆项目，进入项目目录；
+```bash
+git clone git@github.com:chenjun1127/vue-mall.git
+cd vue-mall
+```
+* 安装依赖
+```bash
+npm install or yarn install
+```
+* 启动后台服务
+```bash
+npm run server
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+* 执行
+``` bash
+npm run dev or npm start
+```
+ 
