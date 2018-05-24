@@ -38,7 +38,7 @@ Vue全家桶项目，该项目是基于Vue全家桶开发的商城网站，采�
 * 关键字搜索功能
 * 订单查询功能
 
-### 二、网站整体效果，截图看这里
+### 二、网站整体效果，截图看[这里](https://github.com/chenjun1127/vue-mall/blob/master/images.md)
 
 ### 三、运行环境
 整个项目的运行，首先要确保 [Node](https://nodejs.org/zh-cn/) + [MongoDB](https://www.mongodb.org/downloads#production) 安装并配置好。
