@@ -54,7 +54,7 @@ cd vue-mall
 ```bash
 npm install or yarn install
 ```
-* 启动后台服务
+* 启动后端服务
 ```bash
 npm run server
 ```
