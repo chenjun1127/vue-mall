@@ -65,7 +65,7 @@ npm run dev or npm start
 ```
 * 浏览
 ```
-http://localhost:3000/
+http://localhost:4000/
 ```
 
 * 打包
