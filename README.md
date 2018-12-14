@@ -3,7 +3,8 @@
 > A Vue.js project 
 
 ### 一、简介
-Vue全家桶项目，该项目是基于Vue全家桶开发的商城网站，采用的技术栈为 Webpack + Vue + Vuex + Vue-router + Sass + Es6 + LocalStorage + Css3 + Node(express) + MongoDB；整个项目前后端分离开发，前端基于Vue全家桶进行渲染，后端由NodeJs+MongonDB提供服务。整个项目前后端由本人独自开发，基本实现了一个商城应有的功能！
+Vue全家桶项目，该项目是基于Vue全家桶开发的商城网站，采用的技术栈为 Webpack + Vue + Vuex + Vue-router + Sass + Es6 + LocalStorage + Css3 + Node(express) + MongoDB；整个项目前后端分离开发，前端基于Vue全家桶进行渲染，后端由NodeJs+MongonDB提供服务。整个项目前后端由本人独自开发，基本实现了一个商城应有的功能！[在线浏览，已部署到我自己的阿里云](http://119.23.63.181/#/)
+Tips：感兴趣的朋友可以在线注册一个账号进行体验，由于涉及到线上数据库安全问题，注册的账号都只是普通账号暂不开通高级权限。个人中心修改头像上传图片的时候，没做七牛去上传，所以上传图片会失败（pull代码到本地运行，是可以正常修改头像的）
 
 #### 1、项目依赖基本核心版本：
 * body-parser: "~1.17.1",
@@ -84,3 +85,4 @@ Tips：在npm install or yarn install 的时候，请确保网络良好，如个
 运行此项目一定要先启动 Mongo 服务，并连接 MongoDB 数据库。
 
 如有问题：请 Issue 或联系QQ：402074940
+
