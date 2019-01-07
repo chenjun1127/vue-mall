@@ -69,7 +69,7 @@
     "vue-verify-plugin": "^2.0.3",
     "webpack": "^3.6.0",
     "webpack-bundle-analyzer": "^2.9.0",
-    "webpack-dev-server": ">=3.1.11",
+    "webpack-dev-server": ">=3.0.11",
     "webpack-merge": "^4.1.0"
   },
   "engines": {
