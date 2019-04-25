@@ -3,7 +3,7 @@
 > A Vue.js project 
 
 ### 一、简介
-Vue全家桶项目，该项目是基于Vue全家桶开发的商城网站，采用的技术栈为 Webpack + Vue + Vuex + Vue-router + Sass + Es6 + LocalStorage + Css3 + Node(express) + MongoDB；整个项目前后端分离开发，前端基于Vue全家桶进行渲染，后端由NodeJs+MongonDB提供服务。整个项目前后端由本人独自开发，基本实现了一个商城应有的功能！<font style="color:red"本项目仅供学习及交流，禁止商用及其它营利目的，如需商用，请找我授权</font>
+Vue全家桶项目，该项目是基于Vue全家桶开发的商城网站，采用的技术栈为 Webpack + Vue + Vuex + Vue-router + Sass + Es6 + LocalStorage + Css3 + Node(express) + MongoDB；整个项目前后端分离开发，前端基于Vue全家桶进行渲染，后端由NodeJs+MongonDB提供服务。整个项目前后端由本人独自开发，基本实现了一个商城应有的功能！<font color=#0000ff>本项目仅供学习及交流，禁止商用及其它营利目的，如需商用，请找我授权</font>
 
 [戳这里在线浏览，已部署到我自己的阿里云](http://119.23.63.181/#/)
 
