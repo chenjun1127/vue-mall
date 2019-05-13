@@ -88,7 +88,9 @@ Tips：在npm install or yarn install 的时候，请确保网络良好，如个
 
 运行此项目一定要先启动 Mongo 服务，并连接 MongoDB 数据库。
 
-<b>数据需要自己去建，不提供数据库。如有问题：请 Issue  ，如需联系我本人指导，请先扫描下方二维码打赏联系QQ：402074940 (不为赚钱，只是提升门槛)</b>
+<b>数据需要自己去建，不提供数据库。</b>
+
+如有问题：请 Issue ，如需联系我本人指导，请先扫描下方二维码打赏联系QQ：402074940 (不为赚钱，只是提升门槛)
 
 ![微信](https://github.com/chenjun1127/react-music/raw/master/QR-code/weixin.png)
 
