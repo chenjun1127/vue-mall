@@ -86,7 +86,7 @@ Tips：在npm install or yarn install 的时候，请确保网络良好，如个
 
 强烈推荐使用 Yarn ，Npm 真的太慢了！
 
-运行此项目一定要先启动 Mongo 服务，并连接 MongoDB 数据库。
+运行此项目一定要先启动 Mongo 服务，并连接 MongoDB 数据库。###数据需要自己去建，不提供数据库###
 
-如有问题：请 Issue 或联系QQ：402074940
+如有问题：请 Issue  
 
