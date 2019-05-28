@@ -92,7 +92,7 @@ Tips：在npm install or yarn install 的时候，请确保网络良好，如个
 
 如有问题：请 Issue ，如需联系我本人指导，请先扫描下方微信二维码打赏再联系QQ：402074940 。另外，关于本项目也可以加讨论群，[点击链接加入群聊【vue-mall交流群】](https://jq.qq.com/?_wv=1027&k=5JMOpEx)
 
-![微信](/QR-code/weixin.png)
+![微信](https://github.com/chenjun1127/vue-mall/blob/master/QR-code/weixin.png)
 
 ***
 React 技术交流QQ群：538825125 [点击链接加入群聊【React技术交流群】](https://jq.qq.com/?_wv=1027&k=5mMdA6K)
