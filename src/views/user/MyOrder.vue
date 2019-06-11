@@ -111,7 +111,7 @@
         },
         methods: {
             getData(type) {
-                axios.get(`/api/order/list?id=${sessionStorage.getItem('id')}&type=${type}&t=${Date.now()}`).then(res => {
+                axios.get(`/vue-mall-api/order/list?id=${sessionStorage.getItem('id')}&type=${type}&t=${Date.now()}`).then(res => {
                     if (res.data.code === 200) {
                         this.type = type;
                         if (res.data.list.length > 0) {
@@ -136,7 +136,7 @@
             },
             enter() {
                 if (!this.orderId) return;
-                axios.get(`/api/order/del?id=${this.orderId}&t=${Date.now()}`).then(res => {
+                axios.get(`/vue-mall-api/order/del?id=${this.orderId}&t=${Date.now()}`).then(res => {
                     if (res.data.code === 200) {
                         this.modal.show = false;
                         this.getData(this.type);
