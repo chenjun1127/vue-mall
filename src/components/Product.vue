@@ -49,3 +49,8 @@
     }
 </script>
 
+<style scoped>
+    .card-content{
+        padding-bottom:20px;
+    }
+</style>

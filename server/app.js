@@ -17,16 +17,27 @@ var mongoose = require('mongoose');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var dbUrl = 'mongodb://localhost/shop-mall';
-mongoose.connect(dbUrl);
-mongoose.connection.on('connected',()=>{
-    console.log("MongoDB connected success.");
-});
-mongoose.connection.on('error',()=>{
-    console.log("MongoDB connected fail.");
-});
-mongoose.connection.on('disconnected',()=>{
-    console.log("MongoDB connected disconnected.");
-});
+
+
+mongoose.connect(dbUrl, { useNewUrlParser: true }, function(err) {
+    if (err) {
+        console.log('Connection Error:' + err)
+    } else {
+        console.log('Connection success!')
+    }
+
+})
+
+// mongoose.connect(dbUrl);
+// mongoose.connection.on('connected',()=>{
+//     console.log("MongoDB connected success.");
+// });
+// mongoose.connection.on('error',()=>{
+//     console.log("MongoDB connected fail.");
+// });
+// mongoose.connection.on('disconnected',()=>{
+//     console.log("MongoDB connected disconnected.");
+// });
 
 app.use(session({
     secret: 'mall',
@@ -55,9 +66,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/users', users);
 app.use('/categories', categories);
-app.use('/products',products);
-app.use('/shippingAddress',shippingAddress);
-app.use('/order',order);
+app.use('/products', products);
+app.use('/shippingAddress', shippingAddress);
+app.use('/order', order);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     var err = new Error('Not Found');

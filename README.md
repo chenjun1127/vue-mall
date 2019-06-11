@@ -3,7 +3,12 @@
 > A Vue.js project 
 
 ### 一、简介
-Vue全家桶项目，该项目是基于Vue全家桶开发的商城网站，采用的技术栈为 Webpack + Vue + Vuex + Vue-router + Sass + Es6 + LocalStorage + Css3 + Node(express) + MongoDB；整个项目前后端分离开发，前端基于Vue全家桶进行渲染，后端由NodeJs+MongonDB提供服务。整个项目前后端由本人独自开发，基本实现了一个商城应有的功能！
+Vue全家桶项目，该项目是基于Vue全家桶开发的商城网站，采用的技术栈为 Webpack + Vue + Vuex + Vue-router + Sass + Es6 + LocalStorage + Css3 + Node(express) + MongoDB；整个项目前后端分离开发，前端基于Vue全家桶进行渲染，后端由NodeJs+MongonDB提供服务。整个项目前后端由本人独自开发，基本实现了一个商城应有的功能！<font color=red>本项目仅供学习及交流，禁止商用及其它营利目的，如需商用，请找我授权</font>
+
+[戳这里在线浏览，已部署到我自己的阿里云](http://119.23.63.181/#/)
+
+
+Tips：感兴趣的朋友可以在线注册一个账号进行体验，由于涉及到线上数据库安全问题，注册的账号都只是普通账号暂不开通高级权限。线上个人中心修改头像上传图片的时候，没做七牛云上传，所以上传图片会失败（pull代码到本地运行，是可以正常修改头像的）
 
 #### 1、项目依赖基本核心版本：
 * body-parser: "~1.17.1",
@@ -83,4 +88,14 @@ Tips：在npm install or yarn install 的时候，请确保网络良好，如个
 
 运行此项目一定要先启动 Mongo 服务，并连接 MongoDB 数据库。
 
-如有问题：请 Issue 或联系QQ：402074940
+<b>数据需要自己去建，不提供数据库。想拿此项目去做毕业设计的朋友，请先联系我本人授权，如未授权直接使用，本人保留追究法律责任的权利。</b>
+
+如有问题：请 Issue ，如需联系我本人指导，请先扫描下方微信二维码打赏再联系QQ：402074940 。另外，关于本项目也可以加讨论群，[点击链接加入群聊【vue-mall交流群】](https://jq.qq.com/?_wv=1027&k=5JMOpEx)
+
+![微信](https://github.com/chenjun1127/vue-mall/blob/master/QR-code/weixin.png)
+
+***
+React 技术交流QQ群：538825125 [点击链接加入群聊【React技术交流群】](https://jq.qq.com/?_wv=1027&k=5mMdA6K)
+
+Vue   技术交流QQ群：572305259 [点击链接加入群聊【Vue技术交流群】](https://jq.qq.com/?_wv=1027&k=56wOWOv)
+

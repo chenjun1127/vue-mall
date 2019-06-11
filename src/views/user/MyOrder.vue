@@ -4,10 +4,8 @@
         <div class="container">
             <div class="row">
                 <Tabs :tabs="tabs" v-on:tabClick="tabClick"/>
-                <div v-show="noData" style="text-align: center">暂无订单，
-                    <router-link class="link" to="/">去首页看看~</router-link>
-                </div>
-                <table class="table table-hover table-bordered" v-for="item in orderList">
+
+                <table v-if="!noData" class="table table-hover table-bordered" v-for="item in orderList">
                     <thead>
                     <tr>
                         <th colspan="7">
@@ -46,6 +44,9 @@
                     </tr>
                     </tbody>
                 </table>
+                <div v-else="noData" style="text-align: center">暂无订单，
+                    <router-link class="link" to="/">去首页看看~</router-link>
+                </div>
             </div>
         </div>
         <Modal :modal="modal">
@@ -115,6 +116,7 @@
                         this.type = type;
                         if (res.data.list.length > 0) {
                             this.orderList = [...res.data.list];
+                            this.noData = false;
                         } else {
                             this.noData = true;
                         }
