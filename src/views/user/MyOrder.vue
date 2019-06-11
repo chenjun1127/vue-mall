@@ -162,7 +162,7 @@
         @include align-items(center);
         @include justify-content(space-between);
         :last-child {
-            background: url("/static/images/remove.png") no-repeat;
+            background: url("../../../static/images/remove.png") no-repeat;
             width: 18px;
             height: 18px;
             display: inline-block;

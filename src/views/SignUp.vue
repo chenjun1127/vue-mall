@@ -95,7 +95,7 @@
                     const userInfoObj = this.userInfo;
                     delete userInfoObj.rePassword;
                     delete userInfoObj.verifyCode;
-                    axios.post('/api/users/register', userInfoObj).then(res => {
+                    axios.post('/vue-mall-api/users/register', userInfoObj).then(res => {
                         if (res.data.code === 200) {
                             this.$router.push({name: 'Success', params: {msg: res.data.desc, url: '/'}});
                         } else {

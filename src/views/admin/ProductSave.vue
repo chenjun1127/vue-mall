@@ -119,7 +119,7 @@
         },
         mounted() {
             if (this.$route.query.id) {
-                axios.post('/api/products/inquire', {id: this.$route.query.id}).then(res => {
+                axios.post('/vue-mall-api/products/inquire', {id: this.$route.query.id}).then(res => {
                     if (res.data.code === 200) {
                         this.productInfo = res.data.data;
                     }
@@ -133,7 +133,7 @@
         methods: {
             // 获取商品分类：
             getCategory() {
-                axios.get('/api/categories').then(res => {
+                axios.get('/vue-mall-api/categories').then(res => {
                     if (res.data.code === 200) {
                         if (res.data.list.length > 0) {
                             let array = [];
@@ -151,7 +151,7 @@
                 })
             },
             getData() {
-                axios.post('/api/products/save', Object.assign(this.productInfo, {category: this.selected}), {
+                axios.post('/vue-mall-api/products/save', Object.assign(this.productInfo, {category: this.selected}), {
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
                     },
@@ -184,7 +184,7 @@
                 this.modal.show = true;
             },
             enter() {
-                axios.post('/api/categories/add', {
+                axios.post('/vue-mall-api/categories/add', {
                     name: this.selected
                 }).then(res => {
                     if (res.data.code === 200) {

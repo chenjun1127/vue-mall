@@ -133,7 +133,7 @@
         methods: {
             getData() {
                 if (sessionStorage.getItem('id')) {
-                    axios.get(`/api/users/info?id=${sessionStorage.getItem('id')}&t=${Date.now()}`).then(res => {
+                    axios.get(`/vue-mall-api/users/info?id=${sessionStorage.getItem('id')}&t=${Date.now()}`).then(res => {
                         if (res.data.code === 200) {
                             const result = res.data.data;
                             this.user = Object.assign({}, this.user, result);
@@ -166,7 +166,7 @@
                 // 添加私有的，看不到的，可以用formData.get('file')看有没有
                 console.log(formData.get('file'));
                 const config = {headers: {'Content-Type': 'multipart/form-data'}};
-                axios.post('/api/users/updateInfo', formData, config).then(res => {
+                axios.post('/vue-mall-api/users/updateInfo', formData, config).then(res => {
                     if (res.data.code === 200) {
                         this.$router.push({name: 'Success', params: {msg: '保存成功'}});
                     } else {

@@ -94,7 +94,7 @@
         },
         methods: {
             getData() {
-                axios.get(`/api/products?pageNo=${this.pageNo}&pageSize=${this.pageSize}&t=${Date.now()}`).then(res => {
+                axios.get(`/vue-mall-api/products?pageNo=${this.pageNo}&pageSize=${this.pageSize}&t=${Date.now()}`).then(res => {
                     this.msg = res.data.code;
                     this.totalPage = res.data.count;
                     if (res.data.list.length > 0) {
@@ -118,7 +118,7 @@
             },
             enter() {
                 //  子组件传来的
-                axios.post('/api/products/delete', {id: this.productId}, {
+                axios.post('/vue-mall-api/products/delete', {id: this.productId}, {
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
                     },

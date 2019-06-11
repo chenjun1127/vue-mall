@@ -60,7 +60,7 @@
         methods: {
             toLogin() {
                 if (this.$verify.check()) {
-                    axios.post('/api/users/login', this.userInfo).then(res => {
+                    axios.post('/vue-mall-api/users/login', this.userInfo).then(res => {
                         if (res.data.code === 200) {
                             this.isLogin = true;
                             this.$store.dispatch('updateActionsUser', Object.assign({}, res.data.data, {isLogin: true}));

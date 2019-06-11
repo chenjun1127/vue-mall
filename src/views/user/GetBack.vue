@@ -89,7 +89,7 @@
         methods: {
             submit() {
                 if (this.$verify.check()) {
-                    axios.post('/api/users/savePassword', Object.assign(this.$route.params, {password: this.userInfo.password})).then(res => {
+                    axios.post('/vue-mall-api/users/savePassword', Object.assign(this.$route.params, {password: this.userInfo.password})).then(res => {
                         if (res.data.code === 200) {
                             this.$router.push({name: 'Success', params: {msg: '保存成功，去登录吧!'}});
                         }

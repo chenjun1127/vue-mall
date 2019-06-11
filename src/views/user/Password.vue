@@ -64,7 +64,7 @@
         methods: {
             submit() {
                 if (this.$verify.check()) {
-                    axios.post('/api/users/getBackPassword', this.userInfo).then(res => {
+                    axios.post('/vue-mall-api/users/getBackPassword', this.userInfo).then(res => {
                         if (res.data.code === 200) {
                             this.$router.push({name: 'GetBack', params: Object.assign(this.userInfo, {identifyingCode: res.data.identifyingCode})});
                         } else {

@@ -38,7 +38,7 @@
             }
         },
         mounted() {
-            axios.get(`/api/categories/products?id=${this.$route.query.id}`).then(res=>{
+            axios.get(`/vue-mall-api/categories/products?id=${this.$route.query.id}`).then(res=>{
                 if (res.data.code === 200) {
                     if (res.data.data.length > 0) {
                         this.results = res.data.data;

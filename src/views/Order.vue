@@ -205,7 +205,7 @@
             getData() {
                 const userId = sessionStorage.getItem('id');
                 if (!userId) return;
-                axios.get(`/api/shippingAddress?id=${userId}`).then(res => {
+                axios.get(`/vue-mall-api/shippingAddress?id=${userId}`).then(res => {
                     if (res.data.code === 200) {
                         if (res.data.list && res.data.list.length > 0) {
                             this.addressList = [...res.data.list];
@@ -239,7 +239,7 @@
             saveShippingAddress() {
                 const userId = sessionStorage.getItem('id');
                 if (!userId) return;
-                axios.post('/api/shippingAddress/save', Object.assign({}, this.receive, {ofUser: userId})).then(res => {
+                axios.post('/vue-mall-api/shippingAddress/save', Object.assign({}, this.receive, {ofUser: userId})).then(res => {
                     if (res.data.code === 200) {
                         this.modal.show = false;
                         this.getData();
@@ -306,7 +306,7 @@
             editor(id) {
                 this.modal.show = true;
                 this.receive.addressId = id;
-                axios.get(`/api/shippingAddress/getDetail?id=${id}`).then(res => {
+                axios.get(`/vue-mall-api/shippingAddress/getDetail?id=${id}`).then(res => {
                     if (res.data.code === 200) {
                         this.receive.name = res.data.data.name;
                         this.receive.preAddress = res.data.data.preAddress;
@@ -324,7 +324,7 @@
                 console.log(id);
                 const userId = sessionStorage.getItem('id');
                 if (!userId) return;
-                axios.post('/api/shippingAddress/operate', {id: id, userId: userId, operateId: 1}).then(res => {
+                axios.post('/vue-mall-api/shippingAddress/operate', {id: id, userId: userId, operateId: 1}).then(res => {
                     if (res.data.code === 200) {
                         this.getData();
                     }
@@ -336,7 +336,7 @@
             setDefault(id) {
                 const userId = sessionStorage.getItem('id');
                 if (!userId) return;
-                axios.post('/api/shippingAddress/operate', {id: id, userId: userId, operateId: 2}).then(res => {
+                axios.post('/vue-mall-api/shippingAddress/operate', {id: id, userId: userId, operateId: 2}).then(res => {
                     if (res.data.code === 200) {
                         this.getData();
                     }
@@ -367,7 +367,7 @@
                     cost:this.cost,
                 }, this.getSelectedAddress);
                 console.log(bodyData)
-                axios.post('/api/order', bodyData).then(res => {
+                axios.post('/vue-mall-api/order', bodyData).then(res => {
                     console.log(res);
                     if (res.data.code === 200) {
                         let cartList;

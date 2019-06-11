@@ -40,7 +40,7 @@
         },
         methods: {
             getData() {
-                axios.get(`/api/products?pageNo=${this.pageNo}&pageSize=${this.pageSize}&t=${Date.now()}`).then(res => {
+                axios.get(`/vue-mall-api/products?pageNo=${this.pageNo}&pageSize=${this.pageSize}&t=${Date.now()}`).then(res => {
                     if (res.data.code === 200) {
                         this.totalPage = res.data.count;
                         if (res.data.list.length > 0) {

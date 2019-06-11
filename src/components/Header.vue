@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="logo">
-                        <img src="/static/svg/logo.svg">
+                        <img src="../../static/svg/logo.svg">
                         <p>XX商城网</p>
                     </div>
                 </div>
@@ -143,7 +143,7 @@
             }
         },
         mounted() {
-            axios.get('/api/users/session?t=' + Date.now()).then(res => {
+            axios.get('/vue-mall-api/users/session?t=' + Date.now()).then(res => {
                 if (res.data.code === 200) {
                     this.isLogin = true;
                     this.user.name = res.data.data.name;
@@ -186,7 +186,7 @@
                 if (this.$refs.userEmail.style.display === "block") {
                     // 注册
                     if (this.$verify.check()) {
-                        axios.post('/api/users/register', this.user).then(res => {
+                        axios.post('/vue-mall-api/users/register', this.user).then(res => {
                             if (res.data.code === 200) {
                                 this.$router.push({name: 'Success', params: {msg: res.data.desc}});
                             } else {
@@ -200,7 +200,7 @@
                 } else {
                     // 登录
                     if (this.$verify.check('name') && this.$verify.check('password')) {
-                        axios.post('/api/users/login', this.user).then(res => {
+                        axios.post('/vue-mall-api/users/login', this.user).then(res => {
                             if (res.data.code === 200) {
                                 this.modal.show = false;
                                 this.isLogin = true;
@@ -219,7 +219,7 @@
                 }
             },
             toLogout() {
-                axios.get('/api/users/logout?t=' + Date.now()).then(res => {
+                axios.get('/vue-mall-api/users/logout?t=' + Date.now()).then(res => {
                     if (res.data.code === 200) {
                         this.isLogin = false;
                         this.user.name = '';
@@ -368,7 +368,7 @@
         cursor: pointer;
         color: #e02f2f;
         em {
-            background: url("/static/svg/sale-car.svg") center no-repeat;
+            background: url("../../static/svg/sale-car.svg") center no-repeat;
             width: 20px;
             height: 20px;
             background-size: contain;

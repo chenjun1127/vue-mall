@@ -37,7 +37,7 @@
             const searchText = this.$route.params.text;
             this.searchText = searchText;
             if (searchText) {
-                axios.get(`/api/products/search?searchText=${searchText}&t=${Date.now()}`).then(res => {
+                axios.get(`/vue-mall-api/products/search?searchText=${searchText}&t=${Date.now()}`).then(res => {
                     if (res.data.code === 200) {
                         console.log(res)
                         if (res.data.data.length > 0) {

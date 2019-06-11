@@ -77,7 +77,7 @@
         },
         methods: {
             getCategory() {
-                axios.get('/api/categories').then(res => {
+                axios.get('/vue-mall-api/categories').then(res => {
                     console.log(res);
                     this.categoryList = res.data.list;
                     this.categoryList.map(item => {
@@ -101,7 +101,7 @@
                 this.modal.show = false;
             },
             enter() {
-                axios.post('/api/categories/delete', {id: this.categoryId}, {
+                axios.post('/vue-mall-api/categories/delete', {id: this.categoryId}, {
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
                     },

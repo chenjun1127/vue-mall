@@ -56,7 +56,7 @@
         methods: {
             addCategory() {
                 let _body = this.$route.query.id ? {name: this.name, id: this.$route.query.id} : {name: this.name};
-                axios.post('/api/categories/add', _body).then(res => {
+                axios.post('/vue-mall-api/categories/add', _body).then(res => {
                     if (res.data.code === 200) {
                         this.$router.push({name: 'Success', params: {msg: '保存成功', url: '/category/list'}});
                     }

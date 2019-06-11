@@ -2,7 +2,7 @@
     <div class="cart" @mouseenter="mouseEnter" @mouseleave="mouseLeave">
         <em></em>
         <span>我的购物车</span>
-        <i>{{$store.state.userInfo.isLogin && $store.state.cartList.length > 0 ? $store.state.cartList.length : 0}}</i>
+        <i>{{$store.state.userInfo.isLogin && $store.state.cartList && $store.state.cartList.length > 0 ? $store.state.cartList.length : 0}}</i>
         <div class="cartBox" :style="{'display':show ? 'block':'none'}">
             <div v-if="hasGoods">
                 <ul>
@@ -132,7 +132,7 @@
         cursor: pointer;
         color: #e02f2f;
         em {
-            background: url("/static/svg/sale-car.svg") center no-repeat;
+            background: url("../../static/images/sales-car.png") center no-repeat;
             width: 20px;
             height: 20px;
             background-size: contain;

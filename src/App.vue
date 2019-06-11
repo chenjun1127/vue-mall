@@ -44,7 +44,7 @@
         margin-top: 10px;
         min-height: 20px;
         line-height: 20px;
-        background: url("/static/images/tips.png") no-repeat left -1px;
+        background: url("../static/images/tips.png") no-repeat left -1px;
         padding-left: 25px;
         margin-bottom: 0;
         clear: both;
