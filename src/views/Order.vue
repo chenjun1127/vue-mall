@@ -50,7 +50,7 @@
                         </thead>
                         <tbody>
                         <tr v-for="item in orderList">
-                            <td><img class="cartImg" :src="`/static/products/${item.image}`"/></td>
+                            <td><img class="cartImg" :src="`static/products/${item.image}`"/></td>
                             <td>{{item.name}}</td>
                             <td>{{item.sum}}</td>
                             <td>{{item.price}}</td>
@@ -549,7 +549,7 @@
             bottom: 0;
             display: block;
             color: #fff;
-            background: url("/static/svg/selected.svg");
+            background: url("../../static/svg/selected.svg");
             background-size: cover;
             width: 13px;
             height: 13px;

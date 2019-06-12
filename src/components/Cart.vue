@@ -7,7 +7,7 @@
             <div v-if="hasGoods">
                 <ul>
                     <li v-for="item in goodList" :key="item.id">
-                        <img class="cartImg" :src="`/static/products/${item.image}`"/>
+                        <img class="cartImg" :src="`static/products/${item.image}`"/>
                         <div>{{item.name}}</div>
                         <p>
                             <span>￥{{formatPrice(item.price)}} × {{item.sum}}</span>

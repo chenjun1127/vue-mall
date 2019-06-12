@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-3 card" v-for="item in list">
             <div class="card-content">
-                <div class="card-img" id="tt"><img class="card-img-top" v-lazy="`/static/products/${item.image}`"></div>
+                <div class="card-img" id="tt"><img class="card-img-top" v-lazy="`static/products/${item.image}`"></div>
                 <h4 class="card-title">{{item.name}}</h4>
                 <p class="card-text">价格：<em>￥</em><span>{{formatPrice(item.price)}}</span></p>
                 <p class="card-text">库存：{{item.amount}}</p>
@@ -41,7 +41,7 @@
                         localStorage.setItem('cartList', JSON.stringify(list));
                     }
                 } else {
-                    this.$router.push({path: '/login'});
+                    this.$router.push({path: '/signIn'});
                 }
             }
         },

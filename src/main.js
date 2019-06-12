@@ -13,7 +13,7 @@ import verifyRules from './verifyRules';
 
 Vue.config.productionTip = false
 Vue.use(VueLazyLoad, {
-    loading: '/static/loading-svg/loading-bars.svg'
+    loading: 'static/loading-svg/loading-bars.svg'
 });
 Vue.use(Vuex);
 Vue.use(tools);

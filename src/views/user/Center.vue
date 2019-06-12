@@ -110,7 +110,7 @@
                     sign: '',
                     img: '',
                 },
-                styleBgObj: 'backgroundImage: url(/static/images/default-head.png)',
+                styleBgObj: 'backgroundImage: url(static/images/default-head.png)',
                 time: '',
                 timer: null,
                 roleClass: null,
@@ -138,7 +138,7 @@
                             const result = res.data.data;
                             this.user = Object.assign({}, this.user, result);
                             if (this.user.img) {
-                                this.styleBgObj = `backgroundImage: url(/static/uploads/${this.user.img})`;
+                                this.styleBgObj = `backgroundImage: url(static/uploads/${this.user.img})`;
                             }
                             if (this.user.role > 10) {
                                 this.roleClass = 'admin';

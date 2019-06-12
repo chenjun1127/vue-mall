@@ -81,6 +81,16 @@ npm run build
 ### 五、项目总结
 整个项目由于是本人独自开发，UI部分基于Bootstrap（没有UI设计师），整体UI细节有待优化完善；部分功能有细微瑕疵，譬如订单的操作（增删改查）未根据订单的状态来判断、产品分类列表未做分页查询等等，这些都需要完善！觉得项目不错的，可以给个Star，谢谢！ 
 
+坑：在使用vue2.0打包项目的时候，如发现背景图片路径错误，请修改 build/utils.js ，加一行publicPath:'../../':
+```
+return ExtractTextPlugin.extract({
+  use: loaders,
+  publicPath:'../../',
+  fallback: 'vue-style-loader'
+})
+```
+在css中，图片的引用使用相对路径即可！
+
 ### 六、重要提示
 Tips：在npm install or yarn install 的时候，请确保网络良好，如个别依赖安装不了，请设置淘宝镜像为安装源；
 

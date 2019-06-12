@@ -20,7 +20,7 @@
                     <tbody>
                     <tr v-for="(item,index) in productList" :id="`tr_${item._id}`">
                         <td>{{(index+1)+pageNo*pageSize-pageSize}}</td>
-                        <td><img class="cartImg" :src="`/static/products/${item.image}`"/></td>
+                        <td><img class="cartImg" :src="`static/products/${item.image}`"/></td>
                         <td>{{item.name}}</td>
                         <td>{{formatTime(item.meta.createAt)}}</td>
                         <td>{{item.price}}</td>

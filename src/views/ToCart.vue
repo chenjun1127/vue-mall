@@ -21,7 +21,7 @@
                     <tbody>
                     <tr v-for="(item) in goodList">
                         <td><span @click="select(item)" v-model="item.checked" :class="['select', item.checked?'selected':'']"></span></td>
-                        <td><img class="cartImg" :src="`/static/products/${item.image}`"/></td>
+                        <td><img class="cartImg" :src="`static/products/${item.image}`"/></td>
                         <td>{{item.name}}</td>
                         <td width="160">
                             <div class="input-group">

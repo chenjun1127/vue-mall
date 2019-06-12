@@ -21,7 +21,7 @@
                     <tr>
                         <td colspan="2">
                             <div class="product" v-for="e in item.goodsList">
-                                <div><img class="cartImg" :src="`/static/products/${e.product.image}`"/></div>
+                                <div><img class="cartImg" :src="`static/products/${e.product.image}`"/></div>
                                 <div>{{e.product.name}}</div>
                                 <div>×{{e.sum}}</div>
                             </div>

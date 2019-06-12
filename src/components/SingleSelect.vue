@@ -77,7 +77,7 @@
                 bottom: 0;
                 display: block;
                 color: #fff;
-                background: url(/static/svg/selected.svg);
+                background: url(../../static/svg/selected.svg);
                 background-size: cover;
                 width: 13px;
                 height: 13px;
