@@ -91,7 +91,7 @@
                 const newList = [];
                 const listMap = {};
                 // 计算数组中重复值，及个数
-                if (list.length === 0) return;
+                if (!list||list.length === 0) return;
                 for (let i = 0, len = list.length, key; i < len; i++) {
                     key = list[i].id + '||' + list[i].name + '||' + list[i].price + '||' + list[i].image; // key为id和name的组合，值为number
                     if (listMap[key]) {
