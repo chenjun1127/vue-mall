@@ -11,11 +11,11 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-        '/api': {
-            target: 'http://119.23.63.181:5000/',
+        '/vue-mall-api': {
+            target: 'http://localhost:5000/',
             changeOrigin: true,
             pathRewrite: {
-                '^/api': ''
+                '^/vue-mall-api': ''
             }
         }
     },
