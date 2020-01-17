@@ -1,6 +1,6 @@
 # Vue Mall
 
-> A Vue.js project 
+> A Vue.js project
 
 ### 一、简介
 Vue全家桶项目，该项目是基于Vue全家桶开发的商城网站，采用的技术栈为 Webpack + Vue + Vuex + Vue-router + Sass + Es6 + LocalStorage + Css3 + Node(express) + MongoDB；整个项目前后端分离开发，前端基于Vue全家桶进行渲染，后端由NodeJs+MongonDB提供服务。整个项目前后端由本人独自开发，基本实现了一个商城应有的功能！<font color=red>本项目仅供学习及交流，禁止商用及其它营利目的，如需商用，请找我授权</font>
@@ -79,7 +79,7 @@ npm run build
 ```
 
 ### 五、项目总结
-整个项目由于是本人独自开发，UI部分基于Bootstrap（没有UI设计师），整体UI细节有待优化完善；部分功能有细微瑕疵，譬如订单的操作（增删改查）未根据订单的状态来判断、产品分类列表未做分页查询等等，这些都需要完善！觉得项目不错的，可以给个Star，谢谢！ 
+整个项目由于是本人独自开发，UI部分基于Bootstrap（没有UI设计师），整体UI细节有待优化完善；部分功能有细微瑕疵，譬如订单的操作（增删改查）未根据订单的状态来判断、产品分类列表未做分页查询等等，这些都需要完善！觉得项目不错的，可以给个Star，谢谢！
 
 坑：在使用vue2.0打包项目的时候，如发现背景图片路径错误，请修改 build/utils.js ，加一行publicPath:'../../':
 ```
@@ -100,9 +100,9 @@ Tips：在npm install or yarn install 的时候，请确保网络良好，如个
 
 <b>数据需要自己去建，不提供数据库。想拿此项目去做毕业设计的朋友，请先联系我本人授权，如未授权直接使用，本人保留追究法律责任的权利。</b>
 
-如有问题：请 Issue ，如需联系我本人指导，请先扫描下方微信二维码打赏再联系QQ：402074940 。另外，关于本项目也可以加讨论群，[点击链接加入群聊【vue-mall交流群】](https://jq.qq.com/?_wv=1027&k=5JMOpEx)
+如有问题：请 Issue ，如需联系我本人指导，请先扫描下方二维码打赏再联系QQ：402074940 。另外，关于本项目也可以加讨论群，[点击链接加入群聊【vue-mall交流群】](https://jq.qq.com/?_wv=1027&k=5JMOpEx)
 
-![微信](https://github.com/chenjun1127/vue-mall/blob/master/QR-code/weixin.png)
+![微信](https://github.com/chenjun1127/vue-mall/blob/master/QR-code/pay.png)
 
 ***
 React 技术交流QQ群：538825125 [点击链接加入群聊【React技术交流群】](https://jq.qq.com/?_wv=1027&k=5mMdA6K)
