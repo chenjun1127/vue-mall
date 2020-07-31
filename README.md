@@ -100,6 +100,8 @@ Tips：在npm install or yarn install 的时候，请确保网络良好，如个
 
 <b>数据需要自己去建，不提供数据库（如想使用，请先扫码授权）。想拿此项目去做毕业设计的朋友，请先联系我本人授权，如未授权直接使用，本人保留追究法律责任的权利。</b>
 
+本项目是基于Vue-cli2.0x的，如果克隆下来运行不成功，请点击这里查看vue-cli3.x的版本。
+
 如有问题：请 Issue ，如需联系我本人指导，请先扫描下方二维码打赏再联系QQ：402074940 。另外，关于本项目也可以加讨论群，[点击链接加入群聊【vue-mall交流群】](https://jq.qq.com/?_wv=1027&k=5JMOpEx)
 
 ![微信](https://github.com/chenjun1127/vue-mall/blob/master/QR-code/pay.png)
